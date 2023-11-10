@@ -7,27 +7,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/left_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/purple_500"
         android:clickable="true"
+        android:visibility="gone"
+        android:gravity="start"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/image_right"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
             android:background="@android:color/transparent"
-            android:foregroundGravity="center"
+            app:layout_constraintDimensionRatio="1:1"
             android:padding="16dp"
             android:src="@drawable/ic_info"
-            app:tint="@color/black" />
-    </RelativeLayout>
+            app:tint="@color/black"
+            android:importantForAccessibility="no" />
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/right_container"
@@ -35,20 +38,22 @@
         android:layout_height="0dp"
         android:background="@android:color/holo_red_dark"
         android:clickable="true"
+        android:gravity="end"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/image_left"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
             android:background="@android:color/transparent"
-            android:foregroundGravity="center"
             android:padding="16dp"
             android:src="@drawable/ic_delete"
-            app:tint="@color/black" />
+            app:tint="@color/black"
+            android:importantForAccessibility="no" />
 
     </RelativeLayout>
 

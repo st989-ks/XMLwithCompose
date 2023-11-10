@@ -14,7 +14,7 @@ import ru.ekr.xml_with_compose.databinding.FragmentXmlBinding
 class FragmentXML : Fragment() {
 
     private var adapterRecycler: AdapterRecyclerXML? = null
-    private var list: List<DataCard> = generatedDataCard(30)
+    private var list: List<DataCard> = generatedDataCard(30000)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +36,22 @@ class FragmentXML : Fragment() {
 
     private fun FragmentXmlBinding.setDraggable(){
         ItemTouchHelper(object :SwipeToCallback(){
+            override fun canMovePosition(item: RecyclerView.ViewHolder) = true
+
+            override fun onSwipeEndToStart(
+                viewHolder: AdapterRecyclerXML.HolderForeXML,
+            ) {
+
+                Toast.makeText(activity, "${viewHolder.getId()}", Toast.LENGTH_SHORT).show()
+                list = list.filter { it.id != viewHolder.getId() }
+                adapterRecycler?.submitList(list)
+            }
+
+            override fun onSwipeStartToEnd(
+                viewHolder: AdapterRecyclerXML.HolderForeXML
+            ) {
+                Toast.makeText(activity, "onSwipeStartToEnd", Toast.LENGTH_SHORT).show()
+            }
 
         }).attachToRecyclerView(recyclerComments)
     }

@@ -67,7 +67,10 @@ class AdapterRecyclerXML : RecyclerView.Adapter<AdapterRecyclerXML.HolderForeXML
     ) : RecyclerView.ViewHolder(binding.root) {
         fun getBinding() =binding
         private val context = binding.root.context
+        private var id = 0
+        fun getId() = id
         fun bind(item: DataCard, position: Int) {
+            this.id = item.id
             binding.textTop.text = item.title
             binding.textBottom.text = item.body
             binding.leftContainer.setOnClickListener { clickInfoCurrent.invoke(item.id) }

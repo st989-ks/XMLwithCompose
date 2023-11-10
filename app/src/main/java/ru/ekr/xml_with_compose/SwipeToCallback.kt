@@ -2,12 +2,13 @@ package ru.ekr.xml_with_compose
 
 import android.graphics.Canvas
 import android.util.Log
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 private const val TAG = "SwipeToCallback"
 
-abstract class SwipeToCallback
+abstract class SwipeToCallback(private val threshold: Float = 0.33f)
     : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START or ItemTouchHelper.END) {
 
     override fun getMovementFlags(
@@ -18,7 +19,7 @@ abstract class SwipeToCallback
         return super.getMovementFlags(recyclerView, viewHolder)
     }
 
-    open fun canMovePosition(item: RecyclerView.ViewHolder): Boolean = true
+    abstract fun canMovePosition(item: RecyclerView.ViewHolder): Boolean
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -26,23 +27,28 @@ abstract class SwipeToCallback
         target: RecyclerView.ViewHolder
     ) = false
 
-    @Suppress("UNCHECKED_CAST")
+
+    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder) = threshold
+
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val view = (viewHolder as? AdapterRecyclerXML.HolderForeXML) ?: run {
-            Log.e(TAG, "onSwiped: view error casts")
-            return
-        }
-        when (direction) {
-            ItemTouchHelper.START -> onSwipeEndToStart(view)
-            ItemTouchHelper.END -> onSwipeStartToEnd(view)
-            else -> Log.e(TAG, "onSwiped: direction does not match")
+     (viewHolder as? AdapterRecyclerXML.HolderForeXML)?.apply {
+         when (direction) {
+             ItemTouchHelper.START -> onSwipeEndToStart(this)
+             ItemTouchHelper.END -> onSwipeStartToEnd(this)
+             else -> Log.e(TAG, "onSwiped: direction does not match")
+         }
+     }
+    }
+
+    abstract fun onSwipeEndToStart(viewHolder: AdapterRecyclerXML.HolderForeXML)
+    abstract  fun onSwipeStartToEnd(viewHolder: AdapterRecyclerXML.HolderForeXML)
+
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        (viewHolder as? AdapterRecyclerXML.HolderForeXML)?.getBinding()?.apply {
+            columText.translationX = 0f
         }
     }
 
-    open fun onSwipeStartToEnd(viewHolder: AdapterRecyclerXML.HolderForeXML) {}
-    open fun onSwipeEndToStart(viewHolder: AdapterRecyclerXML.HolderForeXML) {}
-
-    override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder) = 0f
 
     @Suppress("UNCHECKED_CAST")
     override fun onChildDraw(
@@ -54,17 +60,18 @@ abstract class SwipeToCallback
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-        val view = (viewHolder as? AdapterRecyclerXML.HolderForeXML)?.getBinding() ?: run {
-            Log.e(TAG, "onChildDraw: view error casts")
-            return
+        (viewHolder as? AdapterRecyclerXML.HolderForeXML)?.getBinding()?.apply {
+            when {
+                dX < 0 -> {
+                    leftContainer.isGone = true
+                    rightContainer.isGone = false
+                }
+                dX > 0 -> {
+                    leftContainer.isGone = false
+                    rightContainer.isGone = true
+                }
+            }
+            columText.translationX = dX
         }
-
-        val sizeContainer = view.rightContainer.width.toFloat()
-
-        Log.e(TAG, "onChildDraw: actionState ${dX}")
-
-        val dragMoveOnX = dX.coerceIn(-sizeContainer, sizeContainer)
-
-        view.columText.translationX = dragMoveOnX
     }
 }
