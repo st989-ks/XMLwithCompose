@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">XML with Compose</string>
+    <string name="fragment_list">Фрагментный список</string>
+    <string name="compose_list">Compose список</string>
+</resources>
