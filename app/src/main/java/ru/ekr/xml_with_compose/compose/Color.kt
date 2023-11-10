@@ -1,4 +1,4 @@
-package ru.ekr.xml_with_compose.ui.theme
+package ru.ekr.xml_with_compose.compose
 
 import androidx.compose.ui.graphics.Color
 

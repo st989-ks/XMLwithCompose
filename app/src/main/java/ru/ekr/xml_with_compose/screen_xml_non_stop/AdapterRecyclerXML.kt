@@ -1,10 +1,11 @@
-package ru.ekr.xml_with_compose
+package ru.ekr.xml_with_compose.screen_xml_non_stop
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ru.ekr.xml_with_compose.util.DataCard
 import ru.ekr.xml_with_compose.databinding.ElementRecyclerCommentsBinding
 
 class AdapterRecyclerXML : RecyclerView.Adapter<AdapterRecyclerXML.HolderForeXML>() {

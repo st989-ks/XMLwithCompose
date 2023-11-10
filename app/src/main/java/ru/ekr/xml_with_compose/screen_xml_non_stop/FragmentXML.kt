@@ -1,4 +1,4 @@
-package ru.ekr.xml_with_compose
+package ru.ekr.xml_with_compose.screen_xml_non_stop
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +8,16 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import ru.ekr.xml_with_compose.util.DataCard
+import ru.ekr.xml_with_compose.util.SwipeToCallback
 import ru.ekr.xml_with_compose.databinding.FragmentXmlBinding
+import ru.ekr.xml_with_compose.util.generatedDataCard
 
 
 class FragmentXML : Fragment() {
 
     private var adapterRecycler: AdapterRecyclerXML? = null
-    private var list: List<DataCard> = generatedDataCard(30000)
+    private var list: List<DataCard> = generatedDataCard(30000).toList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +29,6 @@ class FragmentXML : Fragment() {
         setActions()
     }.root
 
-
     private fun FragmentXmlBinding.initBinding() {
         adapterRecycler = AdapterRecyclerXML()
         recyclerComments.adapter = adapterRecycler
@@ -35,13 +37,12 @@ class FragmentXML : Fragment() {
     }
 
     private fun FragmentXmlBinding.setDraggable(){
-        ItemTouchHelper(object :SwipeToCallback(){
+        ItemTouchHelper(object : SwipeToCallback(){
             override fun canMovePosition(item: RecyclerView.ViewHolder) = true
 
             override fun onSwipeEndToStart(
                 viewHolder: AdapterRecyclerXML.HolderForeXML,
             ) {
-
                 Toast.makeText(activity, "${viewHolder.getId()}", Toast.LENGTH_SHORT).show()
                 list = list.filter { it.id != viewHolder.getId() }
                 adapterRecycler?.submitList(list)
@@ -51,6 +52,7 @@ class FragmentXML : Fragment() {
                 viewHolder: AdapterRecyclerXML.HolderForeXML
             ) {
                 Toast.makeText(activity, "onSwipeStartToEnd", Toast.LENGTH_SHORT).show()
+                this.onClearView(viewHolder)
             }
 
         }).attachToRecyclerView(recyclerComments)
@@ -69,6 +71,4 @@ class FragmentXML : Fragment() {
             Toast.makeText(activity, "onClickItem", Toast.LENGTH_SHORT).show()
         }
     }
-
-
 }

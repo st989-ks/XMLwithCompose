@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.ekr.xml_with_compose.util.swipe_recycler.SwipeHorizontalMenuLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sml"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:sml_auto_open_percent="0.2"
+    app:sml_scroller_duration="250">
+
+    <FrameLayout
+        android:id="@+id/smMenuViewLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/purple_500"
+        android:clickable="true"
+        android:gravity="start">
+
+        <ImageView
+            android:id="@+id/image_right"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintDimensionRatio="1:1"
+            android:padding="16dp"
+            android:src="@drawable/ic_info"
+            app:tint="@color/black"
+            android:importantForAccessibility="no" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/smMenuViewRight"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_red_dark"
+        android:clickable="true"
+        android:gravity="end">
+
+        <ImageView
+            android:id="@+id/image_left"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:background="@android:color/transparent"
+            android:padding="16dp"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/black"
+            android:importantForAccessibility="no" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/smContentView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:orientation="vertical"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            tools:text="text_top" />
+
+        <TextView
+            android:id="@+id/text_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            tools:text="text_bottom" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_horizontal"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</ru.ekr.xml_with_compose.util.swipe_recycler.SwipeHorizontalMenuLayout>

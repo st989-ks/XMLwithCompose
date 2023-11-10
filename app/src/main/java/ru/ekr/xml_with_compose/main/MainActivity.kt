@@ -1,9 +1,10 @@
-package ru.ekr.xml_with_compose
+package ru.ekr.xml_with_compose.main
 
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
+import ru.ekr.xml_with_compose.R
 import ru.ekr.xml_with_compose.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

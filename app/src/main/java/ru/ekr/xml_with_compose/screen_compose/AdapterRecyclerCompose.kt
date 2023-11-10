@@ -1,4 +1,4 @@
-package ru.ekr.xml_with_compose
+package ru.ekr.xml_with_compose.screen_compose
 
 import android.view.ViewGroup
 import androidx.compose.animation.animateContentSize
@@ -41,6 +41,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
+import ru.ekr.xml_with_compose.util.DataCard
+import ru.ekr.xml_with_compose.R
 import kotlin.math.roundToInt
 
 class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.HolderForeCompose>() {

@@ -1,21 +1,21 @@
-package ru.ekr.xml_with_compose
+package ru.ekr.xml_with_compose.screen_compose
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import ru.ekr.xml_with_compose.util.DataCard
 import ru.ekr.xml_with_compose.databinding.FragmentComposeBinding
-import ru.ekr.xml_with_compose.databinding.FragmentXmlBinding
+import ru.ekr.xml_with_compose.util.generatedDataCard
 
 
 class FragmentCompose : Fragment() {
 
 
     private var adapterRecycler: AdapterRecyclerCompose? = null
-    private var list: List<DataCard> = generatedDataCard(3000)
+    private var list: List<DataCard> = generatedDataCard(3000).toList()
 
     override fun onCreateView(
         inflater: LayoutInflater,

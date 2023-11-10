@@ -1,4 +1,4 @@
-package ru.ekr.xml_with_compose
+package ru.ekr.xml_with_compose.util
 
 data class DataCard(
     val id: Int,
@@ -7,8 +7,8 @@ data class DataCard(
 )
 
 
-fun generatedDataCard(count: Int): List<DataCard> {
-    return Array(count) { DataCard(id = it) }.toList()
+fun generatedDataCard(count: Int): Array<DataCard> {
+    return Array(count) { DataCard(id = it) }
 }
 
 private val mockTitle = arrayListOf(
