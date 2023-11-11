@@ -4,91 +4,85 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
+private const val INVALID_POSITION = -1
 
 class SwipeMenuRecyclerView : RecyclerView {
-    protected var mViewConfig: ViewConfiguration? = null
-    protected var mOldSwipedView: SwipeHorizontalMenuLayout? = null
-    protected var mOldTouchedPosition = INVALID_POSITION
-    private var mDownX = 0
-    private var mDownY = 0
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context,
+        attrs,
+        defStyle)
 
-    constructor(context: Context?) : super(context!!) {
-        init()
+    private var menuSwipedView: SwipeHorizontalMenuLayout? = null
+    private var menuTouchedPosition = INVALID_POSITION
+
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean = when {
+        event.actionIndex != 0 -> true
+        event.action == MotionEvent.ACTION_DOWN -> doInActionDown(event)
+        else -> super.onInterceptTouchEvent(event)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(
-        context!!, attrs) {
-        init()
-    }
+    private fun doInActionDown(event: MotionEvent): Boolean {
+        var isIntercepted = super.onInterceptTouchEvent(event)
+        findChildViewUnder(event.x, event.y)?.let { findChild ->
+            val touchingPosition = getChildAdapterPosition(findChild)
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
-        context!!, attrs, defStyle) {
-        init()
-    }
+            closeTheSwipeMenuAndInterceptTheEvent(touchingPosition = touchingPosition,
+                onUpdate = { isIntercepted = it })
 
-    protected fun init() {
-        mViewConfig = ViewConfiguration.get(context)
-    }
+            updateMenuWhenFindHolder(touchingPosition)
 
-    private fun getSwipeMenuView(itemView: ViewGroup): View {
-        if (itemView is SwipeHorizontalMenuLayout) return itemView
-        val unvisited: MutableList<View> = ArrayList()
-        unvisited.add(itemView)
-        while (!unvisited.isEmpty()) {
-            val child = unvisited.removeAt(0) as? ViewGroup
-                ?: // view
-                continue
-            if (child is SwipeHorizontalMenuLayout) return child
-            val group = child
-            val childCount = group.childCount
-            for (i in 0 until childCount) unvisited.add(group.getChildAt(i))
-        }
-        return itemView
-    }
-
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        var isIntercepted = super.onInterceptTouchEvent(ev)
-        // ignore Multi-Touch
-        if (ev.actionIndex != 0) return true
-        val action = ev.action
-        when (action) {
-            MotionEvent.ACTION_DOWN -> {
-                mDownX = ev.x.toInt()
-                mDownY = ev.y.toInt()
-                val touchingPosition =
-                    getChildAdapterPosition(findChildViewUnder(ev.x.toInt().toFloat(), ev.y.toInt()
-                        .toFloat())!!)
-                val oldSwipedView = mOldSwipedView
-                if (touchingPosition != mOldTouchedPosition && oldSwipedView  != null) {
-                    // already one swipe menu is opened, so we close it and intercept the event
-                    if (oldSwipedView.isMenuOpen) {
-                        oldSwipedView.smoothCloseMenu()
-                        isIntercepted = true
-                    }
-                }
-                val vh = findViewHolderForAdapterPosition(touchingPosition)
-                if (vh != null) {
-                    val itemView = getSwipeMenuView(vh.itemView as ViewGroup)
-                    if (itemView is SwipeHorizontalMenuLayout) {
-                        mOldSwipedView = itemView as SwipeHorizontalMenuLayout
-                        mOldTouchedPosition = touchingPosition
-                    }
-                }
-                // if we intercept the event, just reset
-                if (isIntercepted) {
-                    mOldSwipedView = null
-                    mOldTouchedPosition = INVALID_POSITION
-                }
-            }
+            if (isIntercepted) resetSwipeItems()
         }
         return isIntercepted
     }
 
-    companion object {
-        private const val INVALID_POSITION = -1
+    private fun updateMenuWhenFindHolder(touchingPosition: Int) =
+        findViewHolderForAdapterPosition(touchingPosition)?.let { viewHolder ->
+            castInSwipeHorizontalMenuLayout(viewHolder)?.let { itemView ->
+                menuSwipedView = itemView
+                menuTouchedPosition = touchingPosition
+            }
+        }
+
+
+    private fun castInSwipeHorizontalMenuLayout(
+        viewHolder: ViewHolder
+    ): SwipeHorizontalMenuLayout? = (viewHolder.itemView as? ViewGroup)?.let {
+        getSwipeMenuView(it) as? SwipeHorizontalMenuLayout
+    }
+
+
+    /** if we intercept the event, just reset*/
+    fun resetSwipeItems() {
+        menuSwipedView = null
+        menuTouchedPosition = INVALID_POSITION
+    }
+
+    /**already one swipe menu is opened, so we close it and intercept the event*/
+    private fun closeTheSwipeMenuAndInterceptTheEvent(
+        touchingPosition: Int,
+        onUpdate: (Boolean) -> Unit,
+    ) = menuSwipedView?.let { oldSwipedView ->
+        if (touchingPosition != menuTouchedPosition && oldSwipedView.isMenuOpen) {
+            oldSwipedView.smoothCloseMenu()
+            onUpdate.invoke(true)
+        }
+    }
+
+    private fun getSwipeMenuView(itemView: ViewGroup): View {
+        if (itemView is SwipeHorizontalMenuLayout) return itemView
+        val unvisited = mutableListOf<View>()
+        unvisited.add(itemView)
+
+        while (unvisited.isNotEmpty()) {
+            val child = unvisited.removeAt(0) as? ViewGroup ?: continue
+            if (child is SwipeHorizontalMenuLayout) return child
+            for (i in 0 until child.childCount) unvisited.add(child.getChildAt(i))
+        }
+        return itemView
     }
 }
