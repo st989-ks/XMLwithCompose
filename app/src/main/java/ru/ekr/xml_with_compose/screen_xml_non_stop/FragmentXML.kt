@@ -27,7 +27,7 @@ import ru.ekr.xml_with_compose.util.generatedDataCard
 class FragmentXML : Fragment() {
 
     private var adapterRecycler: AdapterRecyclerXML? = null
-    private var list = MutableStateFlow(generatedDataCard(1).toList())
+    private val list = MutableStateFlow<List<DataCard>>(generatedDataCard(1))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +67,7 @@ class FragmentXML : Fragment() {
                 viewHolder: AdapterRecyclerXML.HolderForeXML
             ) {
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                    list.update { generatedDataCard(1).toList().plus(it) }
+                    list.update { generatedDataCard(1).plus(it) }
                 }
                 this.onClearView(viewHolder)
             }
@@ -84,7 +84,7 @@ class FragmentXML : Fragment() {
         }
         adapterRecycler?.onClickItem {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(GENERATED_COUNT).toList() }
+                list.update { generatedDataCard(GENERATED_COUNT) }
             }
         }
     }

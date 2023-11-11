@@ -28,7 +28,7 @@ class FragmentCompose : Fragment() {
 
 
     private var adapterRecycler: AdapterRecyclerCompose? = null
-    private val list = MutableStateFlow(generatedDataCard(1).toList())
+    private val list = MutableStateFlow<List<DataCard>>(generatedDataCard(1))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,12 +60,12 @@ class FragmentCompose : Fragment() {
         }
         adapterRecycler?.onClickInfo {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(1).toList().plus(it) }
+                list.update { generatedDataCard(1).plus(it) }
             }
         }
         adapterRecycler?.onClickItem {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(GENERATED_COUNT).toList() }
+                list.update { generatedDataCard(GENERATED_COUNT) }
             }
         }
     }

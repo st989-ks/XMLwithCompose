@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.ekr.xml_with_compose.databinding.FragmentXmlSwiperBinding
+import ru.ekr.xml_with_compose.util.DataCard
 import ru.ekr.xml_with_compose.util.GENERATED_COUNT
 import ru.ekr.xml_with_compose.util.generatedDataCard
 
@@ -21,7 +22,7 @@ import ru.ekr.xml_with_compose.util.generatedDataCard
 class FragmentXMLSwiper : Fragment() {
 
     private var adapterRecycler: AdapterRecyclerXMLSwiper? = null
-    private var list = MutableStateFlow(generatedDataCard(1).toList())
+    private val list = MutableStateFlow<List<DataCard>>(generatedDataCard(1))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,12 +53,12 @@ class FragmentXMLSwiper : Fragment() {
         }
         adapterRecycler?.onClickInfo {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(1).toList().plus(it) }
+                list.update { generatedDataCard(1).plus(it) }
             }
         }
         adapterRecycler?.onClickItem {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(GENERATED_COUNT).toList() }
+                list.update { generatedDataCard(GENERATED_COUNT) }
             }
         }
     }

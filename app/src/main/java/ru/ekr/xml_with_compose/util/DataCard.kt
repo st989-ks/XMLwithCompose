@@ -7,8 +7,8 @@ data class DataCard(
 )
 
 
-fun generatedDataCard(count: Int): Array<DataCard> {
-    return Array(count) { DataCard(id = it) }
+fun generatedDataCard(count: Int): MutableList<DataCard> {
+    return  MutableList(count){ DataCard(id = it) }
 }
 
 const val GENERATED_COUNT = 3000
