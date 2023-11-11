@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "XML with Compose"
 include(":app")
- 
+include(":swipe_recycler")

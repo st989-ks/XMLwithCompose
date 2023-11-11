@@ -1,4 +1,4 @@
-package ru.ekr.xml_with_compose.util.swipe_recycler
+package ru.ekr.swipe_recycler
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,12 +6,11 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import androidx.core.view.ViewCompat
-import ru.ekr.xml_with_compose.R
-import ru.ekr.xml_with_compose.util.swipe_recycler.listener.SwipeSwitchListener
-import ru.ekr.xml_with_compose.util.swipe_recycler.swiper.LeftHorizontalSwiper
-import ru.ekr.xml_with_compose.util.swipe_recycler.swiper.RightHorizontalSwiper
+import ru.ekr.swipe_recycler.listener.SwipeSwitchListener
+import ru.ekr.swipe_recycler.swiper.LeftHorizontalSwiper
+import ru.ekr.swipe_recycler.swiper.RightHorizontalSwiper
 
-import ru.ekr.xml_with_compose.util.swipe_recycler.swiper.Swiper
+import ru.ekr.swipe_recycler.swiper.Swiper
 import kotlin.math.abs
 
 

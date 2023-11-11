@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ru.ekr.xml_with_compose.util.swipe_recycler.SwipeMenuRecyclerView
+    <ru.ekr.swipe_recycler.SwipeMenuRecyclerView
       android:id="@+id/recycler_comments"
       android:layout_width="match_parent"
       android:layout_height="match_parent"

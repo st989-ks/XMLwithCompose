@@ -1,4 +1,4 @@
-package ru.ekr.xml_with_compose.util.swipe_recycler.swiper
+package ru.ekr.swipe_recycler.swiper
 
 import android.view.View
 import android.widget.OverScroller

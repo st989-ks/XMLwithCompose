@@ -1,4 +1,4 @@
-package ru.ekr.xml_with_compose.util.swipe_recycler
+package ru.ekr.swipe_recycler
 
 import android.content.Context
 import android.util.AttributeSet

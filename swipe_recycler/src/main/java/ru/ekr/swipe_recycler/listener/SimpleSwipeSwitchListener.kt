@@ -1,6 +1,6 @@
-package ru.ekr.xml_with_compose.util.swipe_recycler.listener
+package ru.ekr.swipe_recycler.listener
 
-import ru.ekr.xml_with_compose.util.swipe_recycler.SwipeMenuLayout
+import ru.ekr.swipe_recycler.SwipeMenuLayout
 
 
 class SimpleSwipeSwitchListener : SwipeSwitchListener {

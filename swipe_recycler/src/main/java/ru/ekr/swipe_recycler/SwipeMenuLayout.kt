@@ -1,4 +1,4 @@
-package ru.ekr.xml_with_compose.util.swipe_recycler
+package ru.ekr.swipe_recycler
 
 import android.content.Context
 import android.util.AttributeSet
@@ -10,10 +10,9 @@ import android.view.animation.AnimationUtils
 import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import android.widget.OverScroller
-import ru.ekr.xml_with_compose.R
-import ru.ekr.xml_with_compose.util.swipe_recycler.listener.SwipeFractionListener
-import ru.ekr.xml_with_compose.util.swipe_recycler.listener.SwipeSwitchListener
-import ru.ekr.xml_with_compose.util.swipe_recycler.swiper.Swiper
+import ru.ekr.swipe_recycler.listener.SwipeFractionListener
+import ru.ekr.swipe_recycler.listener.SwipeSwitchListener
+import ru.ekr.swipe_recycler.swiper.Swiper
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
