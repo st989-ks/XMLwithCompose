@@ -50,6 +50,7 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
     private var clickInfoCurrent: (position: Int) -> Unit = {}
     private var cLickDeleteCurrent: (position: Int) -> Unit = {}
     private var clickItemCurrent: (position: Int) -> Unit = {}
+    private val mapOffset = mutableMapOf<Int, Float>()
 
     fun onClickInfo(listener: (position: Int) -> Unit) {
         clickInfoCurrent = listener
@@ -100,7 +101,8 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
                     onCLickDelete = clickDelete,
                     onClickItem = clickItem,
                     textTitle = item.title,
-                    textBody = item.body
+                    id = item.id,
+                    textBody = item.body,
                 )
             }
         }
@@ -111,6 +113,7 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
     fun OrderCardWithSwipe(
         textTitle: String,
         textBody: String,
+        id: Int,
         onClickInfo: () -> Unit,
         onClickItem: () -> Unit,
         onCLickDelete: () -> Unit
@@ -120,7 +123,7 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
         val scope = rememberCoroutineScope()
         var heightContentDp by remember { mutableStateOf(0.dp) }
         var widthDeletePx by remember { mutableIntStateOf(0) }
-        var offsetXDynamics by remember { mutableFloatStateOf(0f) }
+        var offsetXDynamics by remember(id) { mutableFloatStateOf(0f) }
         val offsetXLimit by remember(widthDeletePx) { mutableFloatStateOf(-widthDeletePx.toFloat()) }
         val halfOffsetXLimit = offsetXLimit * 0.7
 
@@ -198,24 +201,13 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
                             orientation = Orientation.Horizontal,
                             onDragStopped = {
                                 this.launch {
-                                    when {
-                                        offsetXDynamics < halfOffsetXLimit -> animate(
-                                            offsetXDynamics,
-                                            offsetXLimit
-                                        ) { value, velocity ->
-                                            offsetXDynamics = value
-                                        }
-
-                                        offsetXDynamics > -halfOffsetXLimit -> animate(
-                                            offsetXDynamics,
-                                            -offsetXLimit
-                                        ) { value, velocity ->
-                                            offsetXDynamics = value
-                                        }
-
-                                        else -> animate(offsetXDynamics, 0f) { value, velocity ->
-                                            offsetXDynamics = value
-                                        }
+                                 val endOffset =   when {
+                                        offsetXDynamics < halfOffsetXLimit -> offsetXLimit
+                                        offsetXDynamics > -halfOffsetXLimit -> -offsetXLimit
+                                        else -> 0f
+                                    }
+                                    animate(offsetXDynamics, endOffset) { value, velocity ->
+                                        offsetXDynamics = value
                                     }
                                 }
                             },

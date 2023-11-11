@@ -60,7 +60,7 @@ class FragmentCompose : Fragment() {
         }
         adapterRecycler?.onClickInfo {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(1).plus(it) }
+                list.update { generatedDataCard(1,it.last().id).plus(it) }
             }
         }
         adapterRecycler?.onClickItem {

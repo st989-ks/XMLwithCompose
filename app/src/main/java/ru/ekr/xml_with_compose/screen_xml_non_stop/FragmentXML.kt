@@ -67,7 +67,7 @@ class FragmentXML : Fragment() {
                 viewHolder: AdapterRecyclerXML.HolderForeXML
             ) {
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                    list.update { generatedDataCard(1).plus(it) }
+                    list.update { generatedDataCard(1,it.last().id).plus(it) }
                 }
                 this.onClearView(viewHolder)
             }
