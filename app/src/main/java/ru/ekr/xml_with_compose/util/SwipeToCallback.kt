@@ -74,8 +74,8 @@ abstract class SwipeToCallback(private val threshold: Float = 0.4f) :
         (viewHolder as? AdapterRecyclerXML.HolderForeXML)?.getBinding()?.apply {
             when {
                 dX < 0 -> {
-                    leftContainer.isGone = true
                     rightContainer.isGone = false
+                    leftContainer.isGone = true
                 }
 
                 dX > 0 -> {
