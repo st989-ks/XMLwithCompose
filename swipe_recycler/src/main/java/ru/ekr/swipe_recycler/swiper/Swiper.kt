@@ -4,7 +4,10 @@ import android.view.View
 import android.widget.OverScroller
 
 
-abstract class Swiper(val direction: Int, val menuView: View) {
+abstract class Swiper(
+    val direction: Int,
+    val menuView: View
+) {
 
     protected var mChecker: Checker = Checker()
     abstract fun isMenuOpen(scrollDis: Int): Boolean

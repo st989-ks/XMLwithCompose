@@ -41,8 +41,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
-import ru.ekr.xml_with_compose.util.DataCard
 import ru.ekr.xml_with_compose.R
+import ru.ekr.xml_with_compose.util.DataCard
 import kotlin.math.roundToInt
 
 class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.HolderForeCompose>() {
@@ -118,14 +118,23 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
         onClickItem: () -> Unit,
         onCLickDelete: () -> Unit
     ) {
-
         val density = LocalDensity.current
         val scope = rememberCoroutineScope()
         var heightContentDp by remember { mutableStateOf(0.dp) }
         var widthDeletePx by remember { mutableIntStateOf(0) }
-        var offsetXDynamics by remember(id) { mutableFloatStateOf(0f) }
         val offsetXLimit by remember(widthDeletePx) { mutableFloatStateOf(-widthDeletePx.toFloat()) }
-        val halfOffsetXLimit = offsetXLimit * 0.7
+        val halfOffsetXLimit = offsetXLimit * 0.5
+        var offsetXDynamics by remember(id) { mutableFloatStateOf(0f) }
+
+        val animatedTo: (start: Float, end: Float) -> Unit = remember(offsetXDynamics) {
+            { start, end ->
+                scope.launch {
+                    animate(start, end) { value, _ ->
+                        offsetXDynamics = value
+                    }
+                }
+            }
+        }
 
         Box(
             modifier = Modifier
@@ -139,11 +148,7 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
                     .align(Alignment.CenterStart)
                     .clickable {
                         onClickInfo.invoke()
-                        scope.launch {
-                            animate(offsetXDynamics, 0f) { value, velocity ->
-                                offsetXDynamics = value
-                            }
-                        }
+                        animatedTo.invoke(offsetXDynamics, 0f)
                     }
                     .wrapContentWidth()
                     .size(heightContentDp)
@@ -168,11 +173,7 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
                     .align(Alignment.CenterEnd)
                     .clickable {
                         onCLickDelete.invoke()
-                        scope.launch {
-                            animate(offsetXDynamics, 0f) { value, velocity ->
-                                offsetXDynamics = value
-                            }
-                        }
+                        animatedTo.invoke(offsetXDynamics, 0f)
                     }
                     .wrapContentWidth()
                     .size(heightContentDp)
@@ -198,24 +199,25 @@ class AdapterRecyclerCompose : RecyclerView.Adapter<AdapterRecyclerCompose.Holde
                     .fillMaxWidth()
                     .offset { IntOffset(offsetXDynamics.roundToInt(), 0) }
                     .draggable(
-                            orientation = Orientation.Horizontal,
-                            onDragStopped = {
-                                this.launch {
-                                 val endOffset =   when {
-                                        offsetXDynamics < halfOffsetXLimit -> offsetXLimit
-                                        offsetXDynamics > -halfOffsetXLimit -> -offsetXLimit
-                                        else -> 0f
-                                    }
-                                    animate(offsetXDynamics, endOffset) { value, velocity ->
-                                        offsetXDynamics = value
-                                    }
+                        orientation = Orientation.Horizontal,
+                        onDragStopped = {
+                            this.launch {
+                                val endOffset = when {
+                                    offsetXDynamics < halfOffsetXLimit -> offsetXLimit
+                                    offsetXDynamics > -halfOffsetXLimit -> -offsetXLimit
+                                    else -> 0f
                                 }
-                            },
-                            state = rememberDraggableState { delta ->
-                                val newOffset = offsetXDynamics + delta
-                                offsetXDynamics = newOffset.coerceIn(offsetXLimit, -offsetXLimit)
+                                animatedTo(offsetXDynamics, endOffset)
                             }
-                        )
+                        },
+                        state = rememberDraggableState { delta ->
+                            (offsetXDynamics + delta)
+                                .coerceIn(offsetXLimit, -offsetXLimit)
+                                .let {
+                                    offsetXDynamics = it
+                                }
+                        }
+                    )
 
             ) {
                 Column(

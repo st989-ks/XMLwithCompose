@@ -3,6 +3,7 @@ package ru.ekr.swipe_recycler
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import androidx.core.view.ViewCompat
@@ -24,13 +25,13 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
     override val len: Int = currentSwiper?.menuWidth ?: 0
 
     val isMenuOpen: Boolean
-        get() = ((beginSwiper != null && beginSwiper?.isMenuOpen(scrollX) == true)
-                || (endSwiper != null && endSwiper?.isMenuOpen(scrollX) == true))
+        get() = ((menuSwiperLeft != null && menuSwiperLeft?.isMenuOpen(scrollX) == true)
+                || (menuSwiperRight != null && menuSwiperRight?.isMenuOpen(scrollX) == true))
 
     val isMenuOpenNotEqual: Boolean
         get() {
-            return ((beginSwiper != null && beginSwiper?.isMenuOpenNotEqual(scrollX) == true)
-                    || (endSwiper != null && endSwiper?.isMenuOpenNotEqual(scrollX) == true))
+            return ((menuSwiperLeft != null && menuSwiperLeft?.isMenuOpenNotEqual(scrollX) == true)
+                    || (menuSwiperRight != null && menuSwiperRight?.isMenuOpenNotEqual(scrollX) == true))
         }
 
 
@@ -97,10 +98,10 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
                 if (dragging) {
                     if (currentSwiper == null || shouldResetSwiper) {
                         currentSwiper = when {
-                            disX < 0 && beginSwiper == null -> endSwiper
-                            disX < 0 && beginSwiper != null -> beginSwiper
-                            endSwiper == null -> beginSwiper
-                            else -> endSwiper
+                            disX < 0 && menuSwiperLeft == null -> menuSwiperRight
+                            disX < 0 && menuSwiperLeft != null -> menuSwiperLeft
+                            menuSwiperRight == null -> menuSwiperLeft
+                            else -> menuSwiperRight
                         }
                     }
                     scrollBy(disX.toInt(), 0)
@@ -185,13 +186,13 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
             if (currentSwiper is LeftHorizontalSwiper) {
                 if (absScrollX == 0) {
                     swipeSwitchListener?.beginMenuClosed(this)
-                } else if (absScrollX == beginSwiper?.menuWidth) {
+                } else if (absScrollX == menuSwiperLeft?.menuWidth) {
                     swipeSwitchListener?.beginMenuOpened(
                         this)
                 }
 
                 if (swipeFractionListener != null) {
-                    var fraction: Float = absScrollX.toFloat() / (beginSwiper?.menuWidth ?: 1)
+                    var fraction: Float = absScrollX.toFloat() / (menuSwiperLeft?.menuWidth ?: 1)
                     fraction = decimalFormat.format(fraction).toFloat()
                     if (fraction != preLeftMenuFraction) {
                         swipeFractionListener?.beginMenuSwipeFraction(this, fraction)
@@ -202,12 +203,12 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
 
                 if (absScrollX == 0) {
                     swipeSwitchListener?.endMenuClosed(this)
-                } else if (absScrollX == endSwiper?.menuWidth) {
+                } else if (absScrollX == menuSwiperRight?.menuWidth) {
                     swipeSwitchListener?.endMenuOpened(this)
                 }
 
                 if (swipeFractionListener != null) {
-                    var fraction: Float = absScrollX.toFloat() / (endSwiper?.menuWidth ?: 1)
+                    var fraction: Float = absScrollX.toFloat() / (menuSwiperRight?.menuWidth ?: 1)
                     fraction = decimalFormat.format(fraction).toFloat()
                     if (fraction != preRightMenuFraction) {
                         swipeFractionListener?.endMenuSwipeFraction(this, fraction)
@@ -216,7 +217,7 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
                 }
             }
         }
-        preScrollX = getScrollX()
+        preScrollX = scrollX
     }
 
     override fun computeScroll() {
@@ -237,8 +238,8 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
         isClickable = true
         contentView = findViewById(R.id.content_view)
             ?: throw IllegalArgumentException("Not find content_view by id smContentView")
-        beginSwiper = LeftHorizontalSwiper(findViewById(R.id.menu_view_left))
-        endSwiper = RightHorizontalSwiper(findViewById(R.id.menu_view_right))
+        menuSwiperLeft = LeftHorizontalSwiper(findViewById(R.id.menu_view_left))
+        menuSwiperRight = RightHorizontalSwiper(findViewById(R.id.menu_view_right))
     }
 
 
@@ -253,7 +254,9 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        Log.e("overrideonLayout", "onLayout: $changed  $l $t $r $b", )
         contentView?.let { contentViewNotNull ->
+
             val parentViewWidth: Int = measuredWidthAndState
             val contentViewWidth: Int = contentViewNotNull.measuredWidthAndState
             val contentViewHeight: Int = contentViewNotNull.measuredHeightAndState
@@ -262,23 +265,30 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
             var tGap: Int = paddingTop + lp.topMargin
             contentViewNotNull.layout(lGap, tGap, lGap + contentViewWidth, tGap + contentViewHeight)
 
-            endSwiper?.let { endSwiperNotNull ->
+
+
+            menuSwiperLeft?.let { beginSwiperNotNull ->
+                val menuViewWidth = beginSwiperNotNull.menuView.measuredWidthAndState
+                val menuViewHeight = beginSwiperNotNull.menuView.measuredHeightAndState
+                lp = beginSwiperNotNull.menuView.layoutParams as? LayoutParams ?: return
+                tGap = paddingTop + lp.topMargin
+                beginSwiperNotNull.menuView.layout(
+                    -menuViewWidth,
+                    tGap,
+                    0,
+                    tGap + menuViewHeight)
+            }
+
+            menuSwiperRight?.let { endSwiperNotNull ->
                 val menuViewWidth: Int = endSwiperNotNull.menuView.measuredWidthAndState
                 val menuViewHeight: Int = endSwiperNotNull.menuView.measuredHeightAndState
                 lp = endSwiperNotNull.menuView.layoutParams as? LayoutParams ?: return
                 tGap = paddingTop + lp.topMargin
                 endSwiperNotNull.menuView.layout(
                     parentViewWidth,
-                    tGap, parentViewWidth + menuViewWidth,
+                    tGap,
+                    parentViewWidth + menuViewWidth,
                     tGap + menuViewHeight)
-            }
-
-            beginSwiper?.let { beginSwiperNotNull ->
-                val menuViewWidth = beginSwiperNotNull.menuView.measuredWidthAndState
-                val menuViewHeight = beginSwiperNotNull.menuView.measuredHeightAndState
-                lp = beginSwiperNotNull.menuView.layoutParams as? LayoutParams ?: return
-                tGap = paddingTop + lp.topMargin
-                beginSwiperNotNull.menuView.layout(-menuViewWidth, tGap, 0, tGap + menuViewHeight)
             }
         }
     }

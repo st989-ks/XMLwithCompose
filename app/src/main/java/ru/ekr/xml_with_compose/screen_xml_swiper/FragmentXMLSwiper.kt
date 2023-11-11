@@ -1,6 +1,7 @@
 package ru.ekr.xml_with_compose.screen_xml_swiper
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +54,7 @@ class FragmentXMLSwiper : Fragment() {
         }
         adapterRecycler?.onClickInfo {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(1,it.last().id).plus(it) }
+                list.update { generatedDataCard(1,it.maxByOrNull { maxIt -> maxIt.id }?.id).plus(it) }
             }
         }
         adapterRecycler?.onClickItem {

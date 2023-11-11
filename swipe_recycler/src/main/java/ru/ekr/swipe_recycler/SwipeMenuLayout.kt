@@ -40,8 +40,8 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
     protected var downX = 0f
 
     protected var contentView: View? = null
-    protected var beginSwiper: Swiper? = null
-    protected var endSwiper: Swiper? = null
+    protected var menuSwiperLeft: Swiper? = null
+    protected var menuSwiperRight: Swiper? = null
     protected var currentSwiper: Swiper? = null
 
     protected var shouldResetSwiper = false
@@ -81,26 +81,26 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
     }
 
     fun smoothOpenBeginMenu() {
-        requireNotNull(beginSwiper) { "Not have begin menu!" }
-        currentSwiper = beginSwiper ?: return
+        requireNotNull(menuSwiperLeft) { "Not have begin menu!" }
+        currentSwiper = menuSwiperLeft ?: return
         smoothOpenMenu()
     }
 
     fun smoothOpenEndMenu() {
-        requireNotNull(endSwiper) { "Not have end menu!" }
-        currentSwiper = endSwiper ?: return
+        requireNotNull(menuSwiperRight) { "Not have end menu!" }
+        currentSwiper = menuSwiperRight ?: return
         smoothOpenMenu()
     }
 
     fun smoothCloseBeginMenu() {
-        requireNotNull(beginSwiper) { "Not have begin menu!" }
-        currentSwiper = beginSwiper ?: return
+        requireNotNull(menuSwiperLeft) { "Not have begin menu!" }
+        currentSwiper = menuSwiperLeft ?: return
         smoothCloseMenu()
     }
 
     fun smoothCloseEndMenu() {
-        requireNotNull(endSwiper) { "Not have end menu!" }
-        currentSwiper = endSwiper ?: return
+        requireNotNull(menuSwiperRight) { "Not have end menu!" }
+        currentSwiper = menuSwiperRight ?: return
         smoothCloseMenu()
     }
 
