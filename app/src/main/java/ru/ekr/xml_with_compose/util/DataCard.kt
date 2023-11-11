@@ -11,6 +11,8 @@ fun generatedDataCard(count: Int): Array<DataCard> {
     return Array(count) { DataCard(id = it) }
 }
 
+const val GENERATED_COUNT = 3000
+
 private val mockTitle = arrayListOf(
     "Синий стол",
     "Быстрый автомобиль",

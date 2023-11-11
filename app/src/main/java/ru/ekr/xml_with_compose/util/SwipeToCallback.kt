@@ -61,7 +61,6 @@ abstract class SwipeToCallback(private val threshold: Float = 0.4f) :
         }
     }
 
-
     @Suppress("UNCHECKED_CAST")
     override fun onChildDraw(
         c: Canvas,

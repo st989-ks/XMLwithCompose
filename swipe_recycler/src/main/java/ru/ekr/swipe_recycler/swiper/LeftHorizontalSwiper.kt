@@ -4,31 +4,25 @@ import android.view.View
 import android.widget.OverScroller
 import kotlin.math.abs
 
-/**
- * Created by tubingbing on 16/4/11.
- */
-class LeftHorizontalSwiper(menuView: View?) : Swiper(BEGIN_DIRECTION, menuView!!) {
-    override fun isMenuOpen(scrollX: Int): Boolean {
-        return scrollX <= -menuView.width * direction
+class LeftHorizontalSwiper(menuView: View) : Swiper(BEGIN_DIRECTION, menuView) {
+    override fun isMenuOpen(scrollDis: Int): Boolean {
+        return scrollDis <= -menuView.width * direction
     }
 
-    override fun isMenuOpenNotEqual(scrollX: Int): Boolean {
-        return scrollX < -menuView.width * direction
+    override fun isMenuOpenNotEqual(scrollDis: Int): Boolean {
+        return scrollDis < -menuView.width * direction
     }
 
-    override fun autoOpenMenu(scroller: OverScroller?, scrollX: Int, duration: Int) {
-        scroller!!.startScroll(abs(scrollX.toDouble())
-            .toInt(), 0, (menuView.width - abs(scrollX.toDouble())).toInt(), 0, duration)
+    override fun autoOpenMenu(scroller: OverScroller, scrollDis: Int, duration: Int) {
+        scroller.startScroll(abs(scrollDis), 0, (menuView.width - abs(scrollDis)), 0, duration)
     }
 
-    override fun autoCloseMenu(scroller: OverScroller?, scrollX: Int, duration: Int) {
-        scroller!!.startScroll((-abs(scrollX.toDouble())).toInt(), 0, abs(scrollX.toDouble())
-            .toInt(), 0, duration)
+    override fun autoCloseMenu(scroller: OverScroller, scrollDis: Int, duration: Int) {
+        scroller.startScroll((-abs(scrollDis)), 0, abs(scrollDis), 0, duration)
     }
 
-    override fun checkXY(x: Int, y: Int): Checker? {
+    override fun checkXY(x: Int): Checker {
         mChecker.x = x
-        mChecker.y = y
         mChecker.shouldResetSwiper = false
         if (mChecker.x == 0) {
             mChecker.shouldResetSwiper = true
@@ -42,7 +36,7 @@ class LeftHorizontalSwiper(menuView: View?) : Swiper(BEGIN_DIRECTION, menuView!!
         return mChecker
     }
 
-    override fun isClickOnContentView(contentView: View?, x: Float): Boolean {
-        return x > menuView.width
+    override fun isClickOnContentView(contentView: View?, clickPoint: Float): Boolean {
+        return clickPoint > menuView.width
     }
 }

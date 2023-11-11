@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="smContentView" type="id"/>
-    <item name="smMenuViewLeft" type="id"/>
-    <item name="smMenuViewRight" type="id"/>
-    <item name="smMenuViewTop" type="id"/>
-    <item name="smMenuViewBottom" type="id"/>
+    <item name="content_view" type="id"/>
+    <item name="menu_view_left" type="id"/>
+    <item name="menu_view_right" type="id"/>
 </resources>

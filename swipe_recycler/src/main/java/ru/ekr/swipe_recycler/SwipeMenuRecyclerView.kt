@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 
 private const val INVALID_POSITION = -1
 
-class SwipeMenuRecyclerView : RecyclerView {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context,
-        attrs,
-        defStyle)
+class SwipeMenuRecyclerView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : RecyclerView(context, attrs, defStyle) {
+
 
     private var menuSwipedView: SwipeHorizontalMenuLayout? = null
     private var menuTouchedPosition = INVALID_POSITION

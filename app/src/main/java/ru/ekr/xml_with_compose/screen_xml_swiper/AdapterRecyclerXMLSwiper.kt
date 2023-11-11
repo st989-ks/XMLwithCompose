@@ -75,9 +75,18 @@ class AdapterRecyclerXMLSwiper : RecyclerView.Adapter<AdapterRecyclerXMLSwiper.H
             this.id = item.id
             binding.textTop.text = item.title
             binding.textBottom.text = item.body
-            binding.smMenuViewLeft.setOnClickListener { clickInfoCurrent.invoke(item.id) }
-            binding.smMenuViewRight.setOnClickListener { clickDeleteCurrent.invoke(item.id) }
-            binding.smContentView.setOnClickListener { clickItemCurrent.invoke(item.id) }
+            binding.menuViewLeft.setOnClickListener {
+                clickInfoCurrent.invoke(item.id)
+                binding.root.smoothCloseMenu()
+            }
+            binding.menuViewRight.setOnClickListener {
+                clickDeleteCurrent.invoke(item.id)
+                binding.root.smoothCloseMenu()
+            }
+            binding.contentView.setOnClickListener {
+                clickItemCurrent.invoke(item.id)
+                binding.root.smoothCloseMenu()
+            }
         }
     }
 }

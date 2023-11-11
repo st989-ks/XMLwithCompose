@@ -1,55 +1,65 @@
 package ru.ekr.swipe_recycler
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
-import android.view.View
 import androidx.core.view.ViewCompat
 import ru.ekr.swipe_recycler.listener.SwipeSwitchListener
 import ru.ekr.swipe_recycler.swiper.LeftHorizontalSwiper
 import ru.ekr.swipe_recycler.swiper.RightHorizontalSwiper
-
 import ru.ekr.swipe_recycler.swiper.Swiper
 import kotlin.math.abs
 
+open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : SwipeMenuLayout(context, attrs, defStyle) {
+    protected var preScrollX: Int = 0
+    protected var preLeftMenuFraction: Float = -1f
+    protected var preRightMenuFraction: Float = -1f
+    override var isSwipeEnable: Boolean = true
+    override val len: Int = currentSwiper?.menuWidth ?: 0
 
-open class SwipeHorizontalMenuLayout : SwipeMenuLayout {
-    protected var mPreScrollX: Int = 0
-    protected var mPreLeftMenuFraction: Float = -1f
-    protected var mPreRightMenuFraction: Float = -1f
+    val isMenuOpen: Boolean
+        get() = ((beginSwiper != null && beginSwiper?.isMenuOpen(scrollX) == true)
+                || (endSwiper != null && endSwiper?.isMenuOpen(scrollX) == true))
 
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context,
-        attrs,
-        defStyle)
+    val isMenuOpenNotEqual: Boolean
+        get() {
+            return ((beginSwiper != null && beginSwiper?.isMenuOpenNotEqual(scrollX) == true)
+                    || (endSwiper != null && endSwiper?.isMenuOpenNotEqual(scrollX) == true))
+        }
 
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        var isIntercepted: Boolean = super.onInterceptTouchEvent(ev)
-        val action: Int = ev.action
+
+    override fun setSwipeListener(swipeSwitchListener: SwipeSwitchListener) {
+        this.swipeSwitchListener = swipeSwitchListener
+    }
+
+    override fun getMoveLen(event: MotionEvent) = (event.x - scrollX).toInt()
+
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+        var isIntercepted: Boolean = super.onInterceptTouchEvent(event)
+        val action: Int = event.action
         when (action) {
             MotionEvent.ACTION_DOWN -> {
-                run {
-                    mLastX = ev.x
-                    mDownX = mLastX
-                }
-                mDownY = ev.y
+                lastX = event.x
+                downX = lastX
                 isIntercepted = false
             }
 
             MotionEvent.ACTION_MOVE -> {
-                val disX = (ev.x - mDownX)
-                val disY = (ev.y - mDownY)
-                isIntercepted =
-                    abs(disX.toDouble()) > mScaledTouchSlop && abs(disX.toDouble()) > abs(disY.toDouble())
+                val disX = (event.x - downX)
+                isIntercepted = abs(disX) > scaledTouchSlop
             }
 
             MotionEvent.ACTION_UP -> {
                 isIntercepted = false
                 // menu view opened and click on content view,
                 // we just close the menu view and intercept the up event
-                if ((isMenuOpen && mCurrentSwiper?.isClickOnContentView(this, ev.x) == true)) {
+                if ((isMenuOpen && currentSwiper?.isClickOnContentView(this, event.x) == true)) {
                     smoothCloseMenu()
                     isIntercepted = true
                 }
@@ -57,58 +67,58 @@ open class SwipeHorizontalMenuLayout : SwipeMenuLayout {
 
             MotionEvent.ACTION_CANCEL -> {
                 isIntercepted = false
-                if (mScroller?.isFinished == false) mScroller?.abortAnimation()
+                if (!scroller.isFinished) scroller.abortAnimation()
             }
         }
         return isIntercepted
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(ev: MotionEvent): Boolean {
-        if (mVelocityTracker == null) mVelocityTracker = VelocityTracker.obtain()
-        mVelocityTracker?.addMovement(ev)
+        if (velocityTracker == null) velocityTracker = VelocityTracker.obtain()
+        // Check if a click is not handled and invoke performClick
+        velocityTracker?.addMovement(ev)
         val dx: Float
-        val dy: Float
         val action: Int = ev.action
         when (action) {
             MotionEvent.ACTION_DOWN -> {
-                mLastX = ev.x
-                mLastY = ev.y
+                lastX = ev.x
             }
 
-             MotionEvent.ACTION_MOVE  -> if (isSwipeEnable)  {
-                val disX = (mLastX - ev.x)
-                if ((!mDragging
-                            && (abs(disX.toDouble()) > mScaledTouchSlop
-                            ) && (abs(disX.toDouble()) > abs((mLastY - ev.y).toDouble())))) {
-                    mDragging = true
+            MotionEvent.ACTION_MOVE -> if (isSwipeEnable) {
+                val disX = (lastX - ev.x)
+
+                if (!dragging
+                    && (abs(disX) > scaledTouchSlop)
+                ) {
+                    dragging = true
                 }
-                if (mDragging) {
-                    if (mCurrentSwiper == null || shouldResetSwiper) {
-                        mCurrentSwiper = when {
-                            disX < 0 && mBeginSwiper == null -> mEndSwiper
-                            disX < 0 && mBeginSwiper != null -> mBeginSwiper
-                            mEndSwiper == null -> mBeginSwiper
-                            else -> mEndSwiper
+
+                if (dragging) {
+                    if (currentSwiper == null || shouldResetSwiper) {
+                        currentSwiper = when {
+                            disX < 0 && beginSwiper == null -> endSwiper
+                            disX < 0 && beginSwiper != null -> beginSwiper
+                            endSwiper == null -> beginSwiper
+                            else -> endSwiper
                         }
                     }
                     scrollBy(disX.toInt(), 0)
-                    mLastX = ev.x
-                    mLastY = ev.y
+                    lastX = ev.x
                     shouldResetSwiper = false
                 }
             }
 
             MotionEvent.ACTION_UP -> {
-                dx = (mDownX - ev.x)
-                dy = (mDownY - ev.y)
-                mDragging = false
-                mVelocityTracker?.computeCurrentVelocity(1000, mScaledMaximumFlingVelocity.toFloat())
-                val velocityX = mVelocityTracker?.getXVelocity() ?: 0f
-                val velocity  = abs(velocityX.toDouble()).toInt()
-                if (velocity > mScaledMinimumFlingVelocity) {
-                    if (mCurrentSwiper != null) {
+                dx = (downX - ev.x)
+                dragging = false
+                velocityTracker?.computeCurrentVelocity(1000, scaledMaximumFlingVelocity.toFloat())
+                val velocityX = velocityTracker?.xVelocity ?: 0f
+                val velocity = abs(velocityX).toInt()
+                if (velocity > scaledMinimumFlingVelocity) {
+                    if (currentSwiper != null) {
                         val duration: Int = getSwipeDuration(ev, velocity)
-                        if (mCurrentSwiper is RightHorizontalSwiper) {
+                        if (currentSwiper is RightHorizontalSwiper) {
                             if (velocityX < 0) { // just open
                                 smoothOpenMenu(duration)
                             } else { // just close
@@ -124,14 +134,14 @@ open class SwipeHorizontalMenuLayout : SwipeMenuLayout {
                         ViewCompat.postInvalidateOnAnimation(this)
                     }
                 } else {
-                    judgeOpenClose(dx, dy)
+                    judgeOpenClose(dx)
                 }
-                mVelocityTracker?.clear()
-                mVelocityTracker?.recycle()
-                mVelocityTracker = null
-                if ((abs(dx.toDouble()) > mScaledTouchSlop
-                            ) || (abs(dy.toDouble()) > mScaledTouchSlop
-                            ) || isMenuOpen) { // ignore click listener, cancel this event
+                velocityTracker?.clear()
+                velocityTracker?.recycle()
+                velocityTracker = null
+
+                if (abs(dx) > scaledTouchSlop || isMenuOpen
+                ) { // ignore click listener, cancel this event
                     val motionEvent: MotionEvent = MotionEvent.obtain(ev)
                     motionEvent.action = MotionEvent.ACTION_CANCEL
                     return super.onTouchEvent(motionEvent)
@@ -139,83 +149,80 @@ open class SwipeHorizontalMenuLayout : SwipeMenuLayout {
             }
 
             MotionEvent.ACTION_CANCEL -> {
-                mDragging = false
-                if (mScroller?.isFinished == false) {
-                    mScroller?.abortAnimation()
+                dragging = false
+                if (!scroller.isFinished) {
+                    scroller.abortAnimation()
                 } else {
-                    dx = (mDownX - ev.x)
-                    dy = (mDownY - ev.y)
-                    judgeOpenClose(dx, dy)
+                    dx = (downX - ev.x)
+                    judgeOpenClose(dx)
                 }
             }
         }
         return super.onTouchEvent(ev)
     }
 
-    private fun judgeOpenClose(dx: Float, dy: Float) {
-        if (mCurrentSwiper != null) {
-            if (abs(scrollX) >= ((mCurrentSwiper?.menuView?.width ?: 1) * mAutoOpenPercent)) { // auto open
-                if (abs(dx.toDouble()) > mScaledTouchSlop || abs(dy.toDouble()) > mScaledTouchSlop) { // swipe up
-                    if (isMenuOpenNotEqual) smoothCloseMenu() else smoothOpenMenu()
-                } else { // normal up
-                    if (isMenuOpen) smoothCloseMenu() else smoothOpenMenu()
-                }
-            } else { // auto close
-                smoothCloseMenu()
-            }
+    private fun judgeOpenClose(dx: Float) = currentSwiper?.let { currentSwiperNotNull ->
+        val openThresholdSize = ((currentSwiperNotNull.menuView.width) * autoOpenPercent)
+        when {
+            abs(scrollX) >= openThresholdSize && abs(dx) > scaledTouchSlop ->  // auto open // swipe up
+                if (isMenuOpenNotEqual) smoothCloseMenu() else smoothOpenMenu()
+
+            abs(scrollX) >= openThresholdSize -> // auto open  // normal up
+                if (isMenuOpen) smoothCloseMenu() else smoothOpenMenu()
+
+            else -> smoothCloseMenu() // auto close
         }
     }
 
     override fun scrollTo(x: Int, y: Int) {
-        val checker: Swiper.Checker = mCurrentSwiper?.checkXY(x, y) ?: return
+        val checker: Swiper.Checker = currentSwiper?.checkXY(x) ?: return
         shouldResetSwiper = checker.shouldResetSwiper
-        if (checker.x != scrollX) {
-            super.scrollTo(checker.x, checker.y)
-        }
-        if (scrollX != mPreScrollX) {
-            val absScrollX: Int = abs(scrollX)
-            if (mCurrentSwiper is LeftHorizontalSwiper) {
-                    if (absScrollX == 0) {
-                        mSwipeSwitchListener?.beginMenuClosed(this)
-                    }
-                    else if (absScrollX == mBeginSwiper?.menuWidth) {
-                        mSwipeSwitchListener?.beginMenuOpened(
-                            this)
-                    }
 
-                if (mSwipeFractionListener != null) {
-                    var fraction: Float = absScrollX.toFloat() / (mBeginSwiper?.menuWidth ?: 1)
-                    fraction = mDecimalFormat.format(fraction).toFloat()
-                    if (fraction != mPreLeftMenuFraction) {
-                        mSwipeFractionListener?.beginMenuSwipeFraction(this, fraction)
+        if (checker.x != scrollX) super.scrollTo(checker.x,0)
+
+        if (scrollX != preScrollX) {
+            val absScrollX: Int = abs(scrollX)
+            if (currentSwiper is LeftHorizontalSwiper) {
+                if (absScrollX == 0) {
+                    swipeSwitchListener?.beginMenuClosed(this)
+                } else if (absScrollX == beginSwiper?.menuWidth) {
+                    swipeSwitchListener?.beginMenuOpened(
+                        this)
+                }
+
+                if (swipeFractionListener != null) {
+                    var fraction: Float = absScrollX.toFloat() / (beginSwiper?.menuWidth ?: 1)
+                    fraction = decimalFormat.format(fraction).toFloat()
+                    if (fraction != preLeftMenuFraction) {
+                        swipeFractionListener?.beginMenuSwipeFraction(this, fraction)
                     }
-                    mPreLeftMenuFraction = fraction
+                    preLeftMenuFraction = fraction
                 }
             } else {
 
-                    if (absScrollX == 0) {
-                        mSwipeSwitchListener?.endMenuClosed(this)
-                    } else if (absScrollX == mEndSwiper?.menuWidth) {
-                        mSwipeSwitchListener?.endMenuOpened(this)
-                    }
+                if (absScrollX == 0) {
+                    swipeSwitchListener?.endMenuClosed(this)
+                } else if (absScrollX == endSwiper?.menuWidth) {
+                    swipeSwitchListener?.endMenuOpened(this)
+                }
 
-                if (mSwipeFractionListener != null) {
-                    var fraction: Float = absScrollX.toFloat() / (mEndSwiper?.menuWidth ?: 1)
-                    fraction = mDecimalFormat.format(fraction).toFloat()
-                    if (fraction != mPreRightMenuFraction) {
-                        mSwipeFractionListener?.endMenuSwipeFraction(this, fraction)
+                if (swipeFractionListener != null) {
+                    var fraction: Float = absScrollX.toFloat() / (endSwiper?.menuWidth ?: 1)
+                    fraction = decimalFormat.format(fraction).toFloat()
+                    if (fraction != preRightMenuFraction) {
+                        swipeFractionListener?.endMenuSwipeFraction(this, fraction)
                     }
-                    mPreRightMenuFraction = fraction
+                    preRightMenuFraction = fraction
                 }
             }
         }
-        mPreScrollX = getScrollX()
+        preScrollX = getScrollX()
     }
 
     override fun computeScroll() {
-        if (mScroller?.computeScrollOffset() == true) {
-            val currX: Int = abs(mScroller?.currX ?: 0)
-            if (mCurrentSwiper is RightHorizontalSwiper) {
+        if (scroller.computeScrollOffset()) {
+            val currX: Int = abs(scroller.currX)
+            if (currentSwiper is RightHorizontalSwiper) {
                 scrollTo(currX, 0)
                 invalidate()
             } else {
@@ -227,83 +234,52 @@ open class SwipeHorizontalMenuLayout : SwipeMenuLayout {
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        setClickable(true)
-        mContentView = findViewById(R.id.smContentView)
-        if (mContentView == null) {
-            throw IllegalArgumentException("Not find contentView by id smContentView")
-        }
-        val menuViewLeft: View? = findViewById(R.id.smMenuViewLeft)
-        val menuViewRight: View? = findViewById(R.id.smMenuViewRight)
-        if (menuViewLeft == null && menuViewRight == null) {
-            throw IllegalArgumentException("Not find menuView by id (smMenuViewLeft, smMenuViewRight)")
-        }
-        if (menuViewLeft != null) mBeginSwiper = LeftHorizontalSwiper(menuViewLeft)
-        if (menuViewRight != null) mEndSwiper = RightHorizontalSwiper(menuViewRight)
+        isClickable = true
+        contentView = findViewById(R.id.content_view)
+            ?: throw IllegalArgumentException("Not find content_view by id smContentView")
+        beginSwiper = LeftHorizontalSwiper(findViewById(R.id.menu_view_left))
+        endSwiper = RightHorizontalSwiper(findViewById(R.id.menu_view_right))
     }
 
-     val isMenuOpen: Boolean
-        get() = ((mBeginSwiper != null && mBeginSwiper?.isMenuOpen(scrollX)== true)
-                || (mEndSwiper != null && mEndSwiper?.isMenuOpen(scrollX)== true))
-    val isMenuOpenNotEqual: Boolean
-        get() {
-            return ((mBeginSwiper != null && mBeginSwiper?.isMenuOpenNotEqual(scrollX)== true)
-                    || (mEndSwiper != null && mEndSwiper?.isMenuOpenNotEqual(scrollX)== true))
-        }
 
     override fun smoothOpenMenu(duration: Int) {
-        mCurrentSwiper?.autoOpenMenu(mScroller, scrollX, duration)
+        currentSwiper?.autoOpenMenu(scroller, scrollX, duration)
         invalidate()
     }
 
     override fun smoothCloseMenu(duration: Int) {
-        mCurrentSwiper?.autoCloseMenu(mScroller, scrollX, duration)
+        currentSwiper?.autoCloseMenu(scroller, scrollX, duration)
         invalidate()
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val parentViewWidth: Int = ViewCompat.getMeasuredWidthAndState(this)
-        val contentViewWidth: Int = ViewCompat.getMeasuredWidthAndState(mContentView)
-        val contentViewHeight: Int = ViewCompat.getMeasuredHeightAndState(mContentView)
-        var lp: LayoutParams = mContentView?.layoutParams as? LayoutParams ?: return
-        val lGap: Int = paddingLeft + lp.leftMargin
-        var tGap: Int = paddingTop + lp.topMargin
-        mContentView?.layout(lGap,
-            tGap,
-            lGap + contentViewWidth,
-            tGap + contentViewHeight)
-        if (mEndSwiper != null) {
-            val menuViewWidth: Int = ViewCompat.getMeasuredWidthAndState(mEndSwiper?.menuView)
-            val menuViewHeight: Int = ViewCompat.getMeasuredHeightAndState(mEndSwiper?.menuView)
-            lp = mEndSwiper?.menuView?.layoutParams as? LayoutParams ?: return
-            tGap = getPaddingTop() + lp.topMargin
-            mEndSwiper?.menuView?.layout(parentViewWidth,
-                tGap,
-                parentViewWidth + menuViewWidth,
-                tGap + menuViewHeight)
+        contentView?.let { contentViewNotNull ->
+            val parentViewWidth: Int = measuredWidthAndState
+            val contentViewWidth: Int = contentViewNotNull.measuredWidthAndState
+            val contentViewHeight: Int = contentViewNotNull.measuredHeightAndState
+            var lp: LayoutParams = contentViewNotNull.layoutParams as? LayoutParams ?: return
+            val lGap: Int = paddingLeft + lp.leftMargin
+            var tGap: Int = paddingTop + lp.topMargin
+            contentViewNotNull.layout(lGap, tGap, lGap + contentViewWidth, tGap + contentViewHeight)
+
+            endSwiper?.let { endSwiperNotNull ->
+                val menuViewWidth: Int = endSwiperNotNull.menuView.measuredWidthAndState
+                val menuViewHeight: Int = endSwiperNotNull.menuView.measuredHeightAndState
+                lp = endSwiperNotNull.menuView.layoutParams as? LayoutParams ?: return
+                tGap = paddingTop + lp.topMargin
+                endSwiperNotNull.menuView.layout(
+                    parentViewWidth,
+                    tGap, parentViewWidth + menuViewWidth,
+                    tGap + menuViewHeight)
+            }
+
+            beginSwiper?.let { beginSwiperNotNull ->
+                val menuViewWidth = beginSwiperNotNull.menuView.measuredWidthAndState
+                val menuViewHeight = beginSwiperNotNull.menuView.measuredHeightAndState
+                lp = beginSwiperNotNull.menuView.layoutParams as? LayoutParams ?: return
+                tGap = paddingTop + lp.topMargin
+                beginSwiperNotNull.menuView.layout(-menuViewWidth, tGap, 0, tGap + menuViewHeight)
+            }
         }
-        if (mBeginSwiper != null) {
-            val menuViewWidth: Int = ViewCompat.getMeasuredWidthAndState(mBeginSwiper?.menuView)
-            val menuViewHeight: Int =
-                ViewCompat.getMeasuredHeightAndState(mBeginSwiper?.menuView)
-            lp = mBeginSwiper?.menuView?.layoutParams as? LayoutParams ?: return
-            tGap = paddingTop + lp.topMargin
-            mBeginSwiper?.menuView?.layout(-menuViewWidth,
-                tGap,
-                0,
-                tGap + menuViewHeight)
-        }
-    }
-
-    override var isSwipeEnable: Boolean = true
-
-    override fun setSwipeListener(swipeSwitchListener: SwipeSwitchListener) {
-        mSwipeSwitchListener = swipeSwitchListener
-    }
-
-    override val len: Int= mCurrentSwiper?.menuWidth ?:0
-
-    override fun getMoveLen(event: MotionEvent): Int {
-        val sx: Int = scrollX
-        return (event.x - sx).toInt()
     }
 }
