@@ -12,9 +12,7 @@ abstract class SwiperEXP(
     protected var mChecker: Checker = Checker()
     abstract fun isMenuOpen(scrollDis: Int): Boolean
     abstract fun isMenuOpenNotEqual(scrollDis: Int): Boolean
-    abstract fun autoOpenMenu(scroller: OverScroller, scrollDis: Int, duration: Int)
-    abstract fun autoCloseMenu(scroller: OverScroller, scrollDis: Int, duration: Int)
-    abstract fun checkXY(x: Int): Checker
+    abstract fun checkX(x: Int): Checker
     abstract fun isClickOnContentView(contentView: View?, clickPoint: Float): Boolean
 
     val menuWidth: Int

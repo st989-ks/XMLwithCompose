@@ -28,12 +28,24 @@ abstract class SwipeMenuLayoutEXP @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : FrameLayout(context, attrs, defStyle) {
+
     private val viewConfig: ViewConfiguration = ViewConfiguration.get(context)
     protected val scaledTouchSlop = viewConfig.scaledTouchSlop
     protected val scaledMinimumFlingVelocity = viewConfig.scaledMinimumFlingVelocity
     protected val scaledMaximumFlingVelocity = viewConfig.scaledMaximumFlingVelocity
-    protected var autoOpenPercent = DEFAULT_AUTO_OPEN_PERCENT
-    protected var scrollerDuration = DEFAULT_SCROLLER_DURATION
+
+    private  val typeArray = context.obtainStyledAttributes(
+        attrs, R.styleable.SwipeMenuLayoutEXP, 0, defStyle)
+
+    private  val interpolatorIdV2 = typeArray
+        .getResourceId(R.styleable.LinearLayout_content_view_smlexp_scroller_interpolator_content, -1)
+
+    protected var autoOpenPercent =  typeArray.getFloat(
+        R.styleable.SwipeMenuLayoutEXP_smlexp_auto_open_percent, DEFAULT_AUTO_OPEN_PERCENT)
+
+    protected var scrollerDuration = typeArray.getInteger(
+        R.styleable.SwipeMenuLayoutEXP_smlexp_scroller_duration, DEFAULT_SCROLLER_DURATION)
+
 
     protected var lastX = 0f
     protected var downX = 0f
@@ -46,60 +58,18 @@ abstract class SwipeMenuLayoutEXP @JvmOverloads constructor(
     protected var shouldResetSwiper = false
     protected var dragging = false
     open var isSwipeEnable = true
-    protected var scroller: OverScroller = OverScroller(context)
-    protected var interpolator: Interpolator? = null
+
+    protected var interpolatorV2: Interpolator? =if (interpolatorIdV2 > 0)
+        AnimationUtils.loadInterpolator(getContext(), interpolatorIdV2)
+    else null
+    protected var scrollerV2: OverScroller = OverScroller(context, interpolatorV2)
+
+
+
+
     protected var velocityTracker: VelocityTracker? = null
 
-    protected var decimalFormat: NumberFormat = DecimalFormat(
-        "#.00", DecimalFormatSymbols(Locale.getDefault()))
-
-    init {
-        if (!isInEditMode) {
-            val typeArray =
-                context.obtainStyledAttributes(attrs, R.styleable.SwipeMenuLayoutEXP, 0, defStyle)
-
-            val interpolatorId = typeArray
-                .getResourceId(R.styleable.SwipeMenuLayoutEXP_smlexp_scroller_interpolator, -1)
-
-            if (interpolatorId > 0) interpolator = AnimationUtils
-                .loadInterpolator(getContext(), interpolatorId)
-
-            autoOpenPercent =
-                typeArray.getFloat(R.styleable.SwipeMenuLayoutEXP_smlexp_auto_open_percent,
-                DEFAULT_AUTO_OPEN_PERCENT)
-
-            scrollerDuration =
-                typeArray.getInteger(R.styleable.SwipeMenuLayoutEXP_smlexp_scroller_duration,
-                    DEFAULT_SCROLLER_DURATION)
-
-            typeArray.recycle()
-        }
-        scroller = OverScroller(context, interpolator)
-    }
-
-    fun smoothOpenBeginMenu() {
-        requireNotNull(menuSwiperLeftEXP) { "Not have begin menu!" }
-        currentSwiperEXP = menuSwiperLeftEXP ?: return
-        smoothOpenMenu()
-    }
-
-    fun smoothOpenEndMenu() {
-        requireNotNull(menuSwiperRightEXP) { "Not have end menu!" }
-        currentSwiperEXP = menuSwiperRightEXP ?: return
-        smoothOpenMenu()
-    }
-
-    fun smoothCloseBeginMenu() {
-        requireNotNull(menuSwiperLeftEXP) { "Not have begin menu!" }
-        currentSwiperEXP = menuSwiperLeftEXP ?: return
-        smoothCloseMenu()
-    }
-
-    fun smoothCloseEndMenu() {
-        requireNotNull(menuSwiperRightEXP) { "Not have end menu!" }
-        currentSwiperEXP = menuSwiperRightEXP ?: return
-        smoothCloseMenu()
-    }
+    init { typeArray.recycle() }
 
     abstract fun smoothOpenMenu(duration: Int)
     fun smoothOpenMenu() = smoothOpenMenu(scrollerDuration)

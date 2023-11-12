@@ -13,9 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.ekr.xml_with_compose.databinding.FragmentXmlSwiperBinding
 import ru.ekr.xml_with_compose.databinding.FragmentXmlSwiperExpBinding
-import ru.ekr.xml_with_compose.screen_xml_swiper.AdapterRecyclerXMLSwiper
 import ru.ekr.xml_with_compose.util.DataCard
 import ru.ekr.xml_with_compose.util.GENERATED_COUNT
 import ru.ekr.xml_with_compose.util.generatedDataCard
@@ -38,9 +36,9 @@ class FragmentXMLSwiperExp : Fragment() {
     private fun FragmentXmlSwiperExpBinding.initBinding() {
         adapterRecycler = AdapterRecyclerXMLSwiperExp()
         recyclerCommentsExp.adapter = adapterRecycler
-        viewLifecycleOwner.lifecycleScope.launch  {
+        viewLifecycleOwner.lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                list.collectLatest{data ->
+                list.collectLatest { data ->
                     adapterRecycler?.submitList(data)
                 }
             }
@@ -50,17 +48,23 @@ class FragmentXMLSwiperExp : Fragment() {
     private fun FragmentXmlSwiperExpBinding.setActions() {
         adapterRecycler?.onClickDelete { position ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { it.filter { itFilter -> itFilter.id != position } }
+                if (list.value.size > 2) list.update {
+                    it.filter { itFilter -> itFilter.id != position }
+                }
             }
         }
         adapterRecycler?.onClickInfo {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(1,it.maxByOrNull { maxIt -> maxIt.id }?.id).plus(it) }
+                list.update {
+                    it.plus(generatedDataCard(
+                        1,
+                        it.maxByOrNull { maxIt -> maxIt.id }?.id))
+                }
             }
         }
         adapterRecycler?.onClickItem {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(GENERATED_COUNT) }
+                list.update { generatedDataCard(5) }
             }
         }
     }

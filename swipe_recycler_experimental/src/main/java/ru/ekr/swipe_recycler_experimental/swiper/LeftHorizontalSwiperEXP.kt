@@ -13,15 +13,7 @@ class LeftHorizontalSwiperEXP(menuView: View) : SwiperEXP(BEGIN_DIRECTION, menuV
         return scrollDis < -menuView.width * direction
     }
 
-    override fun autoOpenMenu(scroller: OverScroller, scrollDis: Int, duration: Int) {
-        scroller.startScroll(abs(scrollDis), 0, (menuView.width - abs(scrollDis)), 0, duration)
-    }
-
-    override fun autoCloseMenu(scroller: OverScroller, scrollDis: Int, duration: Int) {
-        scroller.startScroll((-abs(scrollDis)), 0, abs(scrollDis), 0, duration)
-    }
-
-    override fun checkXY(x: Int): Checker {
+    override fun checkX(x: Int): Checker {
         mChecker.x = x
         mChecker.shouldResetSwiper = false
         if (mChecker.x == 0) {
