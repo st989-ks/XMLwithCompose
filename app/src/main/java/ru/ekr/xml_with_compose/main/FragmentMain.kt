@@ -12,6 +12,7 @@ import ru.ekr.xml_with_compose.screen_xml_non_stop.FragmentXML
 import ru.ekr.xml_with_compose.R
 import ru.ekr.xml_with_compose.databinding.FragmentMainBinding
 import ru.ekr.xml_with_compose.screen_xml_swiper.FragmentXMLSwiper
+import ru.ekr.xml_with_compose.screen_xml_swiper_exp.FragmentXMLSwiperExp
 
 
 class FragmentMain : Fragment() {
@@ -44,13 +45,19 @@ class FragmentMain : Fragment() {
                 add(R.id.container_fragment, FragmentXMLSwiper())
                 addToBackStack(FragmentXMLSwiper::class.simpleName)
             }
-
         }
         binding.buttonCompose.setOnClickListener {
             Toast.makeText(activity, FragmentCompose::class.simpleName, Toast.LENGTH_SHORT).show()
             activity?.supportFragmentManager?.commit {
                 add(R.id.container_fragment, FragmentCompose())
                 addToBackStack(FragmentCompose::class.simpleName)
+            }
+        }
+        binding.buttonXmlSwiperExp.setOnClickListener {
+            Toast.makeText(activity, FragmentXMLSwiperExp::class.simpleName, Toast.LENGTH_SHORT).show()
+            activity?.supportFragmentManager?.commit {
+                add(R.id.container_fragment, FragmentXMLSwiperExp())
+                addToBackStack(FragmentXMLSwiperExp::class.simpleName)
             }
         }
     }

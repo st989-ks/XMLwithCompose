@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="content_view_smlexp" type="id"/>
+    <item name="menu_view_left_smlexp" type="id"/>
+    <item name="menu_view_right_smlexp" type="id"/>
+</resources>

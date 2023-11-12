@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">XML with Compose</string>
-    <string name="fragment_list">Фрагментный список</string>
-    <string name="fragment_list_swiper">Фрагментный список Swiper</string>
+    <string name="fragment_list">ItemTouchHelper</string>
+    <string name="fragment_list_swiper">SwiperLayout</string>
+    <string name="fragment_list_swiper_exp">SwiperLayout Experimental</string>
     <string name="compose_list">Compose список</string>
 </resources>

@@ -1,4 +1,4 @@
-package ru.ekr.swipe_recycler
+package ru.ekr.swipe_recycler_experimental
 
 import android.content.Context
 import android.util.AttributeSet
@@ -11,9 +11,7 @@ import android.view.animation.AnimationUtils
 import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import android.widget.OverScroller
-import ru.ekr.swipe_recycler.listener.SwipeFractionListener
-import ru.ekr.swipe_recycler.listener.SwipeSwitchListener
-import ru.ekr.swipe_recycler.swiper.Swiper
+import ru.ekr.swipe_recycler_experimental.swiper.SwiperEXP
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
@@ -25,7 +23,7 @@ import kotlin.math.sin
 private const val DEFAULT_SCROLLER_DURATION = 250
 private const val DEFAULT_AUTO_OPEN_PERCENT = 0.5f
 
-abstract class SwipeMenuLayout @JvmOverloads constructor(
+abstract class SwipeMenuLayoutEXP @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
@@ -41,9 +39,9 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
     protected var downX = 0f
 
     protected var contentSwiper: View? = null
-    protected var menuSwiperLeft: Swiper? = null
-    protected var menuSwiperRight: Swiper? = null
-    protected var currentSwiper: Swiper? = null
+    protected var menuSwiperLeftEXP: SwiperEXP? = null
+    protected var menuSwiperRightEXP: SwiperEXP? = null
+    protected var currentSwiperEXP: SwiperEXP? = null
 
     protected var shouldResetSwiper = false
     protected var dragging = false
@@ -52,31 +50,26 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
     protected var interpolator: Interpolator? = null
     protected var velocityTracker: VelocityTracker? = null
 
-     var swipeSwitchListener: SwipeSwitchListener? = null
-         private set
-     var swipeFractionListener: SwipeFractionListener? = null
-         private set
-
     protected var decimalFormat: NumberFormat = DecimalFormat(
         "#.00", DecimalFormatSymbols(Locale.getDefault()))
 
     init {
         if (!isInEditMode) {
             val typeArray =
-                context.obtainStyledAttributes(attrs, R.styleable.SwipeMenuLayout, 0, defStyle)
+                context.obtainStyledAttributes(attrs, R.styleable.SwipeMenuLayoutEXP, 0, defStyle)
 
             val interpolatorId = typeArray
-                .getResourceId(R.styleable.SwipeMenuLayout_sml_scroller_interpolator, -1)
+                .getResourceId(R.styleable.SwipeMenuLayoutEXP_smlexp_scroller_interpolator, -1)
 
             if (interpolatorId > 0) interpolator = AnimationUtils
                 .loadInterpolator(getContext(), interpolatorId)
 
             autoOpenPercent =
-                typeArray.getFloat(R.styleable.SwipeMenuLayout_sml_auto_open_percent,
+                typeArray.getFloat(R.styleable.SwipeMenuLayoutEXP_smlexp_auto_open_percent,
                 DEFAULT_AUTO_OPEN_PERCENT)
 
             scrollerDuration =
-                typeArray.getInteger(R.styleable.SwipeMenuLayout_sml_scroller_duration,
+                typeArray.getInteger(R.styleable.SwipeMenuLayoutEXP_smlexp_scroller_duration,
                     DEFAULT_SCROLLER_DURATION)
 
             typeArray.recycle()
@@ -85,26 +78,26 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
     }
 
     fun smoothOpenBeginMenu() {
-        requireNotNull(menuSwiperLeft) { "Not have begin menu!" }
-        currentSwiper = menuSwiperLeft ?: return
+        requireNotNull(menuSwiperLeftEXP) { "Not have begin menu!" }
+        currentSwiperEXP = menuSwiperLeftEXP ?: return
         smoothOpenMenu()
     }
 
     fun smoothOpenEndMenu() {
-        requireNotNull(menuSwiperRight) { "Not have end menu!" }
-        currentSwiper = menuSwiperRight ?: return
+        requireNotNull(menuSwiperRightEXP) { "Not have end menu!" }
+        currentSwiperEXP = menuSwiperRightEXP ?: return
         smoothOpenMenu()
     }
 
     fun smoothCloseBeginMenu() {
-        requireNotNull(menuSwiperLeft) { "Not have begin menu!" }
-        currentSwiper = menuSwiperLeft ?: return
+        requireNotNull(menuSwiperLeftEXP) { "Not have begin menu!" }
+        currentSwiperEXP = menuSwiperLeftEXP ?: return
         smoothCloseMenu()
     }
 
     fun smoothCloseEndMenu() {
-        requireNotNull(menuSwiperRight) { "Not have end menu!" }
-        currentSwiper = menuSwiperRight ?: return
+        requireNotNull(menuSwiperRightEXP) { "Not have end menu!" }
+        currentSwiperEXP = menuSwiperRightEXP ?: return
         smoothCloseMenu()
     }
 
@@ -113,14 +106,6 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
 
     abstract fun smoothCloseMenu(duration: Int)
     fun smoothCloseMenu() = smoothCloseMenu(scrollerDuration)
-
-    open fun setSwitchListener(swipeSwitchListener: SwipeSwitchListener) {
-        this.swipeSwitchListener = swipeSwitchListener
-    }
-
-    open fun setFractionListener(swipeFractionListener: SwipeFractionListener) {
-        this.swipeFractionListener = swipeFractionListener
-    }
 
     abstract fun getMoveLen(event: MotionEvent): Int
     abstract val len: Int

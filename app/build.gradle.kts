@@ -50,6 +50,7 @@ android {
 
 dependencies {
     implementation(project(":swipe_recycler"))
+    implementation(project(":swipe_recycler_experimental"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

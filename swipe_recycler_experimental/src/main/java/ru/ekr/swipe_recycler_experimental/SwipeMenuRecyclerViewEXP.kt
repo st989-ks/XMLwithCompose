@@ -1,25 +1,22 @@
-package ru.ekr.swipe_recycler
+package ru.ekr.swipe_recycler_experimental
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.children
-import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 
 private const val INVALID_POSITION = -1
 
-class SwipeMenuRecyclerView @JvmOverloads constructor(
+class SwipeMenuRecyclerViewEXP @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : RecyclerView(context, attrs, defStyle) {
 
 
-    private var menuSwipedView: SwipeHorizontalMenuLayout? = null
+    private var menuSwipedView: SwipeHorizontalMenuLayoutEXP? = null
     private var menuTouchedPosition = INVALID_POSITION
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean = when {
@@ -55,8 +52,8 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(
 
     private fun castInSwipeHorizontalMenuLayout(
         viewHolder: ViewHolder
-    ): SwipeHorizontalMenuLayout? = (viewHolder.itemView as? ViewGroup)?.let {
-        getSwipeMenuView(it) as? SwipeHorizontalMenuLayout
+    ): SwipeHorizontalMenuLayoutEXP? = (viewHolder.itemView as? ViewGroup)?.let {
+        getSwipeMenuView(it) as? SwipeHorizontalMenuLayoutEXP
     }
 
 
@@ -78,13 +75,13 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(
     }
 
     private fun getSwipeMenuView(itemView: ViewGroup): View {
-        if (itemView is SwipeHorizontalMenuLayout) return itemView
+        if (itemView is SwipeHorizontalMenuLayoutEXP) return itemView
         val unvisited = mutableListOf<View>()
         unvisited.add(itemView)
 
         while (unvisited.isNotEmpty()) {
             val child = unvisited.removeAt(0) as? ViewGroup ?: continue
-            if (child is SwipeHorizontalMenuLayout) return child
+            if (child is SwipeHorizontalMenuLayoutEXP) return child
             for (i in 0 until child.childCount) unvisited.add(child.getChildAt(i))
         }
         return itemView
