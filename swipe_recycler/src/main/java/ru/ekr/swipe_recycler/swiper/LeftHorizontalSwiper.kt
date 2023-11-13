@@ -1,5 +1,6 @@
 package ru.ekr.swipe_recycler.swiper
 
+import android.util.Log
 import android.view.View
 import android.widget.OverScroller
 import kotlin.math.abs
@@ -24,6 +25,7 @@ class LeftHorizontalSwiper(menuView: View) : Swiper(BEGIN_DIRECTION, menuView) {
     override fun checkXY(x: Int): Checker {
         mChecker.x = x
         mChecker.shouldResetSwiper = false
+
         if (mChecker.x == 0) {
             mChecker.shouldResetSwiper = true
         }

@@ -1,5 +1,6 @@
 package ru.ekr.swipe_recycler.swiper
 
+import android.util.Log
 import android.view.View
 import android.widget.OverScroller
 import kotlin.math.abs

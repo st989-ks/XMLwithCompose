@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SwipeMenuLayoutEXP">
-        <attr name="smlexp_scroller_duration" format="integer" />
-        <attr name="smlexp_auto_open_percent" format="float"/>
-        <attr name="smlexp_scroller_interpolator" format="reference"/>
-    </declare-styleable>
-
-    <declare-styleable name="LinearLayout">
-        <attr name="content_view_smlexp_scroller_interpolator_content" format="reference"/>
+    <declare-styleable name="SwiperLayout">
+        <attr name="sml_auto_open_percent" format="float"/>
     </declare-styleable>
 </resources>

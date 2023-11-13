@@ -78,13 +78,13 @@ open class SwipeHorizontalMenuLayout @JvmOverloads constructor(
 
         when (ev.action) {
             MotionEvent.ACTION_DOWN -> lastX = ev.x
+
             MotionEvent.ACTION_MOVE -> if (isSwipeEnable) {
                 val disX = (lastX - ev.x)
 
                 if (!dragging && (abs(disX) > scaledTouchSlop)) dragging = true
 
                 if (dragging) {
-
                     if (currentSwiper == null || shouldResetSwiper) currentSwiper = when {
                         disX < 0 && menuSwiperLeft == null -> menuSwiperRight
                         disX < 0 && menuSwiperLeft != null -> menuSwiperLeft

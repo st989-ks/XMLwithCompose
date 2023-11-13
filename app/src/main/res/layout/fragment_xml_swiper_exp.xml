@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ru.ekr.swipe_recycler_experimental.SwipeMenuRecyclerViewEXP
+    <ru.ekr.swipe_recycler_experimental.SwipeRecyclerViewEXP
       android:id="@+id/recycler_comments_exp"
       android:layout_width="match_parent"
       android:layout_height="match_parent"

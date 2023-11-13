@@ -49,7 +49,6 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
     protected var dragging = false
     open var isSwipeEnable = true
     protected var scroller: OverScroller = OverScroller(context)
-    protected var interpolator: Interpolator? = null
     protected var velocityTracker: VelocityTracker? = null
 
      var swipeSwitchListener: SwipeSwitchListener? = null
@@ -65,12 +64,6 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
             val typeArray =
                 context.obtainStyledAttributes(attrs, R.styleable.SwipeMenuLayout, 0, defStyle)
 
-            val interpolatorId = typeArray
-                .getResourceId(R.styleable.SwipeMenuLayout_sml_scroller_interpolator, -1)
-
-            if (interpolatorId > 0) interpolator = AnimationUtils
-                .loadInterpolator(getContext(), interpolatorId)
-
             autoOpenPercent =
                 typeArray.getFloat(R.styleable.SwipeMenuLayout_sml_auto_open_percent,
                 DEFAULT_AUTO_OPEN_PERCENT)
@@ -78,10 +71,8 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
             scrollerDuration =
                 typeArray.getInteger(R.styleable.SwipeMenuLayout_sml_scroller_duration,
                     DEFAULT_SCROLLER_DURATION)
-
             typeArray.recycle()
         }
-        scroller = OverScroller(context, interpolator)
     }
 
     fun smoothOpenBeginMenu() {
@@ -133,7 +124,6 @@ abstract class SwipeMenuLayout @JvmOverloads constructor(
      * @return finish duration
      */
     fun getSwipeDuration(event: MotionEvent, velocity: Int): Int {
-        Log.e("Swipe", "getSwipeDuration x - y: ${event.x} - ${event.y}  velocity: $velocity")
         val moveLen = getMoveLen(event)
         val halfLen = len / 2
         val distanceRatio = min(1.0, (1.0 * abs(moveLen) / len))
