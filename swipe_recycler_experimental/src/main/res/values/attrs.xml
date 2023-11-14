@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="SwiperLayout">
-        <attr name="sml_auto_open_percent" format="float"/>
+    <declare-styleable name="SwipeLayout">
+        <attr name="scroller_duration" format="integer" />
+        <attr name="auto_open_ratio" format="float"/>
     </declare-styleable>
 </resources>

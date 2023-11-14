@@ -6,16 +6,17 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ru.ekr.swipe_recycler_experimental.swipe_layout.SwipeLayout
 
 private const val INVALID_POSITION = -1
 
-class SwipeRecyclerViewEXP @JvmOverloads constructor(
+class SwipeRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0,
 ) : RecyclerView(context, attrs, defStyle) {
 
-    private var swipeLayout: SwipeMainLayout? = null
+    private var swipeLayout: SwipeLayout? = null
     private var touchedPosition = INVALID_POSITION
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean = when {
@@ -50,8 +51,8 @@ class SwipeRecyclerViewEXP @JvmOverloads constructor(
 
     private fun castInSwipeHorizontalMenuLayout(
         viewHolder: ViewHolder
-    ): SwipeMainLayout? = (viewHolder.itemView as? ViewGroup)?.let {
-        getSwipeMenuView(it) as? SwipeMainLayout
+    ): SwipeLayout? = (viewHolder.itemView as? ViewGroup)?.let {
+        getSwipeMenuView(it) as? SwipeLayout
     }
 
     /** if we intercept the event, just reset*/
@@ -65,20 +66,20 @@ class SwipeRecyclerViewEXP @JvmOverloads constructor(
         touchingPosition: Int,
         onUpdate: (Boolean) -> Unit,
     ) = swipeLayout?.let { oldSwipedView ->
-        if (touchingPosition != touchedPosition && oldSwipedView.swiperContent.isMenuOpen) {
-            oldSwipedView.swiperContent.smoothCloseMenu()
+        if (touchingPosition != touchedPosition && oldSwipedView.isMenuOpen) {
+            oldSwipedView.closeMenu()
             onUpdate.invoke(true)
         }
     }
 
     private fun getSwipeMenuView(itemView: ViewGroup): View {
-        if (itemView is SwipeMainLayout) return itemView
+        if (itemView is SwipeLayout) return itemView
         val unvisited = mutableListOf<View>()
         unvisited.add(itemView)
 
         while (unvisited.isNotEmpty()) {
             val child = unvisited.removeAt(0) as? ViewGroup ?: continue
-            if (child is SwipeMainLayout) return child
+            if (child is SwipeLayout) return child
             for (i in 0 until child.childCount) unvisited.add(child.getChildAt(i))
         }
         return itemView

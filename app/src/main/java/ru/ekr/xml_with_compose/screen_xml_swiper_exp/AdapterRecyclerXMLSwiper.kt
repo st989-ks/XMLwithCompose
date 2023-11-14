@@ -74,17 +74,17 @@ class AdapterRecyclerXMLSwiperExp : RecyclerView.Adapter<AdapterRecyclerXMLSwipe
             this.id = item.id
             binding.textTopE.text = item.title
             binding.textBottomE.text = item.body
-            binding.menuViewLeftSmlexp.setOnClickListener {
+            binding.menuLeft.setOnClickListener {
                 clickInfoCurrent.invoke(item.id)
-                binding.root.swiperContent.smoothCloseMenu()
+                binding.root.closeMenu()
             }
-            binding.menuViewRightSmlexp.setOnClickListener {
+            binding.menuRight.setOnClickListener {
                 clickDeleteCurrent.invoke(item.id)
-                binding.root.swiperContent.smoothCloseMenu()
+                binding.root.closeMenu()
             }
-            binding.contentViewSmlexp.setOnClickListener {
+            binding.baseContent.setOnClickListener {
                 clickItemCurrent.invoke(item.id)
-                binding.root.swiperContent.smoothCloseMenu()
+                binding.root.closeMenu()
             }
         }
     }

@@ -15,14 +15,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.ekr.xml_with_compose.databinding.FragmentXmlSwiperExpBinding
 import ru.ekr.xml_with_compose.util.DataCard
-import ru.ekr.xml_with_compose.util.GENERATED_COUNT
 import ru.ekr.xml_with_compose.util.generatedDataCard
 
 
 class FragmentXMLSwiperExp : Fragment() {
 
     private var adapterRecycler: AdapterRecyclerXMLSwiperExp? = null
-    private val list = MutableStateFlow<List<DataCard>>(generatedDataCard(1))
+    private val list = MutableStateFlow<List<DataCard>>(generatedDataCard(20))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +63,7 @@ class FragmentXMLSwiperExp : Fragment() {
         }
         adapterRecycler?.onClickItem {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(5) }
+                list.update { generatedDataCard(50) }
             }
         }
     }
