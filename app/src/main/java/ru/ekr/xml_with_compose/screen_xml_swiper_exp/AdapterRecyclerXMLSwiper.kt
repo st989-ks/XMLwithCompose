@@ -72,19 +72,14 @@ class AdapterRecyclerXMLSwiperExp : RecyclerView.Adapter<AdapterRecyclerXMLSwipe
         fun getId() = id
         fun bind(item: DataCard, position: Int) {
             this.id = item.id
-            binding.textTopE.text = item.title
-            binding.textBottomE.text = item.body
             binding.menuLeft.setOnClickListener {
                 clickInfoCurrent.invoke(item.id)
-                binding.root.closeMenu()
             }
             binding.menuRight.setOnClickListener {
                 clickDeleteCurrent.invoke(item.id)
-                binding.root.closeMenu()
             }
-            binding.baseContent.setOnClickListener {
+            binding.baseContent.root.setOnClickListener {
                 clickItemCurrent.invoke(item.id)
-                binding.root.closeMenu()
             }
         }
     }

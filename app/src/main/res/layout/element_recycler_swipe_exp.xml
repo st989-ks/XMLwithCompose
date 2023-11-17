@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ru.ekr.swipe_recycler_experimental.swipe_layout.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ru.ekr.swipe_recycler_experimental.swipe_layout.GestureFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:focusable="true"
+    android:clickable="true"
+    android:layout_height="wrap_content"
+    app:gfl_scroller_duration="200"
+    app:gfl_auto_open_ratio="0.3"
+    app:gfl_left_swipe_enabled="true"
+    app:gfl_right_swipe_enabled="true"
+    >
 
     <FrameLayout
         android:id="@+id/menu_left"
@@ -43,38 +49,42 @@
 
     </FrameLayout>
 
-
-    <LinearLayout
+    <include
         android:id="@+id/base_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_dark"
-        android:clickable="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        layout="@layout/item_goods_data"
+        />
 
-        <TextView
-            android:id="@+id/text_top_e"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            tools:text="text_top" />
+<!--    <LinearLayout-->
+<!--        android:id="@+id/base_content"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/holo_blue_dark"-->
+<!--        android:clickable="true"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical">-->
 
-        <TextView
-            android:id="@+id/text_bottom_e"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            tools:text="text_bottom" />
+<!--        <TextView-->
+<!--            android:id="@+id/text_top_e"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="10dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            tools:text="text_top" />-->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:background="@color/black"
-            android:foregroundGravity="bottom" />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/text_bottom_e"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="10dp"-->
+<!--            android:textColor="@color/black"-->
+<!--            tools:text="text_bottom" />-->
 
-</ru.ekr.swipe_recycler_experimental.swipe_layout.SwipeLayout>
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:background="@color/black"-->
+<!--            android:foregroundGravity="bottom" />-->
+<!--    </LinearLayout>-->
+
+</ru.ekr.swipe_recycler_experimental.swipe_layout.GestureFrameLayout>

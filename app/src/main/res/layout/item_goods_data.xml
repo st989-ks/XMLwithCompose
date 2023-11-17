@@ -3,288 +3,271 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
+    android:background="@color/teal_200"
     android:paddingBottom="4dp"
     tools:ignore="MissingDefaultResource">
 
-<!--    <androidx.constraintlayout.widget.Barrier-->
-<!--        android:id="@+id/barrier_top"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:barrierDirection="bottom" />-->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom" />
 
-<!--    <ToggleButton-->
-<!--        android:id="@+id/goodCheckbox"-->
-<!--        android:layout_width="24dp"-->
-<!--        android:layout_height="24dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginTop="@dimen/receipt_item_paddingTop"-->
-<!--        android:background="@drawable/checkbox_state_new"-->
-<!--        android:includeFontPadding="false"-->
-<!--        android:textOff=""-->
-<!--        android:textOn=""-->
-<!--        android:visibility="visible"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="@id/barrier_top"-->
-<!--        tools:visibility="visible" />-->
+    <ToggleButton
+        android:id="@+id/goodCheckbox"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:includeFontPadding="false"
+        android:textOff=""
+        android:textOn=""
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/barrier_top"
+        tools:visibility="visible" />
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/goodName"-->
-<!--        style="@style/text_label_17_medium"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:maxLines="2"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/goodMenuIcon"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/goodCheckbox"-->
-<!--        app:layout_constraintTop_toTopOf="@id/barrier_top"-->
-<!--        tools:text="good_name" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/goodName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:maxLines="2"
+        app:layout_constraintEnd_toStartOf="@+id/goodMenuIcon"
+        app:layout_constraintStart_toEndOf="@+id/goodCheckbox"
+        app:layout_constraintTop_toTopOf="@id/barrier_top"
+        tools:text="good_name" />
 
-<!--    <androidx.appcompat.widget.AppCompatImageView-->
-<!--        android:id="@+id/goodMenuIcon"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:paddingStart="16dp"-->
-<!--        android:paddingTop="14dp"-->
-<!--        android:paddingEnd="20dp"-->
-<!--        android:paddingBottom="56dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/barrier_top"-->
-<!--        app:srcCompat="@drawable/ic_basket_item_menu" />-->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/goodMenuIcon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_top"
+        app:srcCompat="@drawable/ic_info" />
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/goodInfo"-->
-<!--        style="@style/text_label_14_grey"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/goodMenuIcon"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/goodName"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/goodName"-->
-<!--        tools:text="0.5л, 40%"-->
-<!--        tools:visibility="visible" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/goodInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/goodMenuIcon"
+        app:layout_constraintStart_toStartOf="@+id/goodName"
+        app:layout_constraintTop_toBottomOf="@+id/goodName"
+        android:text="0.5л, 40%" />
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/goodPrice"-->
-<!--        style="@style/text_label_17_grey_bold"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:gravity="start|center_vertical"-->
-<!--        android:includeFontPadding="false"-->
-<!--        android:maxLines="1"-->
-<!--        app:autoSizeMaxTextSize="@dimen/text_size_17"-->
-<!--        app:autoSizeTextType="uniform"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/count"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/decrement"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/goodName"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/count"-->
-<!--        tools:text="999 999.00" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/goodPrice"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="start|center_vertical"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        app:autoSizeMaxTextSize="19sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@+id/count"
+        app:layout_constraintEnd_toStartOf="@+id/decrement"
+        app:layout_constraintStart_toStartOf="@+id/goodName"
+        app:layout_constraintTop_toTopOf="@+id/count"
+        android:text="999 999.00" />
 
-<!--    <androidx.appcompat.widget.AppCompatImageView-->
-<!--        android:id="@+id/decrement"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:padding="4dp"-->
-<!--        android:visibility="visible"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/count"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/guideline"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/goodPrice"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/count"-->
-<!--        app:srcCompat="@drawable/ic_basket_item_decrement" />-->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/decrement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/count"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toEndOf="@+id/goodPrice"
+        app:layout_constraintTop_toTopOf="@+id/count"
+        app:srcCompat="@drawable/ic_info" />
 
-<!--    <androidx.appcompat.widget.AppCompatImageView-->
-<!--        android:id="@+id/editAmount"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:minWidth="32dp"-->
-<!--        android:minHeight="32dp"-->
-<!--        android:padding="4dp"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/decrement"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/decrement"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/decrement"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/decrement"-->
-<!--        app:srcCompat="@drawable/ic_basket_item_amount_edit" />-->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/editAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="32dp"
+        android:minHeight="32dp"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/decrement"
+        app:layout_constraintStart_toStartOf="@+id/decrement"
+        app:layout_constraintEnd_toEndOf="@+id/decrement"
+        app:layout_constraintTop_toTopOf="@+id/decrement"
+        app:srcCompat="@drawable/ic_info" />
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/sum"-->
-<!--        style="@style/text_label_20_black"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:gravity="end|center_vertical"-->
-<!--        android:includeFontPadding="false"-->
-<!--        android:maxLines="1"-->
-<!--        app:autoSizeMaxTextSize="@dimen/text_size_20"-->
-<!--        app:autoSizeTextType="uniform"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/count"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/increment"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/count"-->
-<!--        tools:text="999 999.00" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sum"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="end|center_vertical"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@+id/count"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/increment"
+        app:layout_constraintTop_toTopOf="@+id/count"
+        tools:text="999 999.00" />
 
-<!--    <androidx.appcompat.widget.AppCompatImageView-->
-<!--        android:id="@+id/increment"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:padding="4dp"-->
-<!--        android:visibility="visible"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/count"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/sum"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/count"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/count"-->
-<!--        app:srcCompat="@drawable/ic_basket_item_increment" />-->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/increment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/count"
+        app:layout_constraintEnd_toStartOf="@+id/sum"
+        app:layout_constraintStart_toEndOf="@+id/count"
+        app:layout_constraintTop_toTopOf="@+id/count"
+        app:srcCompat="@drawable/ic_info" />
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/count"-->
-<!--        style="@style/text_label_14_medium"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:gravity="center"-->
-<!--        android:maxLines="1"-->
-<!--        android:padding="8dp"-->
-<!--        app:autoSizeTextType="uniform"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/increment"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/guideline"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/goodInfo"-->
-<!--        tools:text="x900 000" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:padding="8dp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/increment"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/goodInfo"
+        tools:text="x900 000" />
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/scanner_info"-->
-<!--        style="@style/text_label_14_white_medium"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/background_accent_info"-->
-<!--        android:backgroundTint="?attr/lbColorWarning"-->
-<!--        android:drawablePadding="4dp"-->
-<!--        android:paddingHorizontal="8dp"-->
-<!--        android:paddingVertical="4dp"-->
-<!--        android:text="dialog_pdf_multi_count"-->
-<!--        android:visibility="gone"-->
-<!--        app:drawableLeftCompat="@drawable/ic_qr_code_small"-->
-<!--        app:drawableTint="@color/greyscale_0"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/sum"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/sum"-->
-<!--        app:layout_constraintStart_toStartOf="@id/sum"-->
-<!--        tools:visibility="visible" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/scanner_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="dialog_pdf_multi_count"
+        android:visibility="gone"
+        app:drawableLeftCompat="@drawable/ic_info"
+        app:layout_constraintBottom_toTopOf="@id/sum"
+        app:layout_constraintEnd_toEndOf="@id/sum"
+        app:layout_constraintStart_toStartOf="@id/sum"
+        tools:visibility="visible" />
 
-<!--    <View-->
-<!--        android:id="@+id/scanner_info_frame"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:clickable="true"-->
-<!--        android:focusable="true"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/sum"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/sum"-->
-<!--        app:layout_constraintStart_toStartOf="@id/sum"-->
-<!--        app:layout_constraintTop_toTopOf="@id/scanner_info" />-->
+    <View
+        android:id="@+id/scanner_info_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/sum"
+        app:layout_constraintEnd_toEndOf="@id/sum"
+        app:layout_constraintStart_toStartOf="@id/sum"
+        app:layout_constraintTop_toTopOf="@id/scanner_info" />
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/shareLayout"-->
-<!--        style="@style/text_label_14_bold"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:background="@drawable/background_accent_info"-->
-<!--        android:paddingStart="16dp"-->
-<!--        android:paddingTop="9dp"-->
-<!--        android:paddingEnd="16dp"-->
-<!--        android:paddingBottom="9dp"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/goodMenuIcon"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/goodName"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/count"-->
-<!--        tools:text="Акция: Купи 3 товара по цене 2-х" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/shareLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:paddingStart="16dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="9dp"
+        app:layout_constraintEnd_toEndOf="@+id/goodMenuIcon"
+        app:layout_constraintStart_toStartOf="@+id/goodName"
+        app:layout_constraintTop_toBottomOf="@+id/count"
+        tools:text="Акция: Купи 3 товара по цене 2-х" />
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/discountLayout"-->
-<!--        style="@style/text_label_14_bold"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/shareLayout"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:background="@drawable/background_accent_info"-->
-<!--        android:paddingStart="16dp"-->
-<!--        android:paddingTop="9dp"-->
-<!--        android:paddingEnd="16dp"-->
-<!--        android:paddingBottom="9dp"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/goodMenuIcon"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/goodName"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/shareLayout"-->
-<!--        tools:text="Скидка: 20% = 6 руб." />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/discountLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shareLayout"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:paddingStart="16dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="9dp"
+        app:layout_constraintEnd_toEndOf="@+id/goodMenuIcon"
+        app:layout_constraintStart_toStartOf="@+id/goodName"
+        app:layout_constraintTop_toBottomOf="@+id/shareLayout"
+        tools:text="Скидка: 20% = 6 руб." />
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/agentLayout"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:background="@drawable/background_accent_info"-->
-<!--        android:gravity="center_vertical"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:paddingStart="16dp"-->
-<!--        android:paddingTop="9dp"-->
-<!--        android:paddingEnd="20dp"-->
-<!--        android:paddingBottom="9dp"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/goodMenuIcon"-->
-<!--        app:layout_constraintStart_toStartOf="@id/goodName"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/discountLayout">-->
+    <LinearLayout
+        android:id="@+id/agentLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="9dp"
+        app:layout_constraintEnd_toEndOf="@id/goodMenuIcon"
+        app:layout_constraintStart_toStartOf="@id/goodName"
+        app:layout_constraintTop_toBottomOf="@id/discountLayout">
 
-<!--        <androidx.appcompat.widget.AppCompatImageView-->
-<!--            android:id="@+id/agentError"-->
-<!--            android:layout_width="24dp"-->
-<!--            android:layout_height="24dp"-->
-<!--            android:layout_marginEnd="12dp"-->
-<!--            android:src="@drawable/ic_cancel_square"-->
-<!--            android:visibility="gone"-->
-<!--            app:srcCompat="@drawable/ic_cancel_square"-->
-<!--            tools:visibility="visible" />-->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/agentError"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_info"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_info"
+            tools:visibility="visible" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/agentInfo"-->
-<!--            style="@style/text_label_14_bold"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            tools:text="Агент: ООО «Платежный агент»" />-->
+        <TextView
+            android:id="@+id/agentInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="Агент: ООО «Платежный агент»" />
 
-<!--        <androidx.appcompat.widget.AppCompatImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:srcCompat="@drawable/right_arrow" />-->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_info" />
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
 
-<!--    <androidx.appcompat.widget.AppCompatTextView-->
-<!--        android:id="@+id/insuranceLayout"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/discountLayout"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:background="#65D5BFBF"-->
-<!--        android:drawableEnd="@drawable/right_arrow"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:paddingStart="17dp"-->
-<!--        android:paddingTop="9dp"-->
-<!--        android:paddingEnd="17dp"-->
-<!--        android:paddingBottom="9dp"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/goodMenuIcon"-->
-<!--        app:layout_constraintStart_toStartOf="@id/goodName"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/agentLayout"-->
-<!--        tools:text="insurance_add_contract" />-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/insuranceLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/discountLayout"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:background="#65D5BFBF"
+        android:drawableEnd="@drawable/ic_info"
+        android:orientation="horizontal"
+        android:paddingStart="17dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="17dp"
+        android:paddingBottom="9dp"
+        app:layout_constraintEnd_toEndOf="@id/goodMenuIcon"
+        app:layout_constraintStart_toStartOf="@id/goodName"
+        app:layout_constraintTop_toBottomOf="@id/agentLayout"
+        tools:text="insurance_add_contract" />
 
-<!--    <androidx.constraintlayout.widget.Guideline-->
-<!--        android:id="@+id/guideline"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical"-->
-<!--        app:layout_constraintGuide_percent="0.40" />-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.40" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

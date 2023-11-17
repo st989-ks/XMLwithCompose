@@ -21,7 +21,7 @@ import ru.ekr.xml_with_compose.util.generatedDataCard
 class FragmentXMLSwiperExp : Fragment() {
 
     private var adapterRecycler: AdapterRecyclerXMLSwiperExp? = null
-    private val list = MutableStateFlow<List<DataCard>>(generatedDataCard(20))
+    private val list = MutableStateFlow<List<DataCard>>(generatedDataCard(3))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +47,7 @@ class FragmentXMLSwiperExp : Fragment() {
     private fun FragmentXmlSwiperExpBinding.setActions() {
         adapterRecycler?.onClickDelete { position ->
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                if (list.value.size > 2) list.update {
+                if (list.value.size > 1) list.update {
                     it.filter { itFilter -> itFilter.id != position }
                 }
             }
@@ -63,7 +63,7 @@ class FragmentXMLSwiperExp : Fragment() {
         }
         adapterRecycler?.onClickItem {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                list.update { generatedDataCard(50) }
+                list.update { generatedDataCard((3..5).random()) }
             }
         }
     }

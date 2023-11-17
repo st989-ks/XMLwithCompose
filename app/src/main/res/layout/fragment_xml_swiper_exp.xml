@@ -4,16 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_xml_exp"
     android:background="@color/white"
+    android:focusable="true"
+    android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ru.ekr.swipe_recycler_experimental.SwipeRecyclerView
+    <ru.ekr.swipe_recycler_experimental.GestureRecyclerView
       android:id="@+id/recycler_comments_exp"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       tools:listitem="@layout/element_recycler_comments" />
-
-
 
 </RelativeLayout>
